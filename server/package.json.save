@@ -1,0 +1,30 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4", ar mongoose = require('../db-connection/mongo'); "mongoose": "^5.3.4", var project = require('./project'); 
+"morgan": "^1.9.1", var Schema = mongoose.Schema; "nodemon": "^1.18.4" var taskSchema = new Schema({ }
+    // taskId: Number,}
+    taskName: String,
+    assignedTo: [memberID],
+    createdBy: memberID,
+    createdAt: Date,
+    dueDate: Date,
+    status: String,
+    archiveTask: Boolean,
+    duringStandUp: Boolean,
+    projectID: project._id
+});
+var task = mongoose.model('task', taskSchema);
+module.exports = task;
