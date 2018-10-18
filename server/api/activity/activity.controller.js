@@ -21,6 +21,17 @@ function findProjectResponse(req, res) {
 //     })
 // }
 
+function findSpecificProjectResponse(req, res) {
+    let data = {
+        p:req.params.projectId
+    }
+    activityDao.findSpecificProject(data).then(data => {
+        res.status('200').send({
+            data:data
+        })
+    })
+}
+
 function findTaskResponse(req, res) {
    console.log("whjat is happening?")
     let data = 
@@ -125,7 +136,7 @@ function archiveProjectResponse(req, res) {
 
 
 module.exports = {
-    // findSpecificProjectResponse,
+    findSpecificProjectResponse,
     findProjectResponse,
     findTaskResponse,
     findSubTaskResponse,

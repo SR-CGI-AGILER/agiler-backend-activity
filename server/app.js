@@ -28,4 +28,4 @@ app.use(function (req, res, next) {
     next();
 });
 const port = process.env.PORT || 8000
-app.listen(port, () => console.log('I am running on ', port));
+app.listen(8000, `0.0.0.0`,() => console.log('I am running on ', port,));

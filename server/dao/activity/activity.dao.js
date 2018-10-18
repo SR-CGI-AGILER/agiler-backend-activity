@@ -3,16 +3,17 @@ const project = require('../../model/project');
 const task = require('../../model/task');
 const subtask = require('../../model/subtask');
 
-// function findSpecificProject(name) {
-//     return new Promise(function (resolve, reject) {
-//         // console.log(name)
-//         project.find({
-//             "projectName": name.projectName
-//         }, function (err, data) {
-//             // console.log(err, data)
-//             resolve(data)
-//         })
-//     })function findProject(project_data) {
+function findSpecificProject(data) {
+    return new Promise(function (resolve, reject) {
+        console.log(data)
+        project.find({
+            "_id": data.p
+        }).exec(function (err, data) {
+            console.log(err, data)
+            resolve(data)
+        })
+    })
+//     function findProject(project_data) {
 //     return new Promise(function (resolve, reject) {
 //         let a = parseInt(project_data.l);
 //         let b = parseInt(project_data.p);
@@ -23,10 +24,18 @@ const subtask = require('../../model/subtask');
 //             // console.log(err, data)
 //             resolve(data)
 //         })
+//     })function findSpecificProjectResponse(req, res) {
+//     activityDao.findSpecificProject({
+//         projectName: req.params.projectName
+//     }).then(data => {
+//         res.status('200').send({
+//             data: data
+//         })
 //     })
 // }
-
 // }
+
+}
 
 function findProject(project_data) {
     return new Promise(function (resolve, reject) {
@@ -207,7 +216,7 @@ function archiveTask(name) {
 }
 
 module.exports = {
-    // findSpecificProject,
+    findSpecificProject,
     findProject,
     createProject,
     createTask,
