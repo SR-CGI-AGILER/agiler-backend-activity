@@ -38,39 +38,52 @@ function findSubTaskResponse(req, res) {
 // }
 
 function createProjectResponse(req, res) {
-   
-    if(req.body.projectName)
-    {
+   let projectName = req.body.projectName
+        name1 = req.body.assignTo.map(function(e) {
+                    
+        id = e.teamId,
+        name = e.teamName
+            
+        });
+    if((req.body.assignTo).length == 1){
+        if(projectName && name)
+        {
+            
         
-       
-        let temp=(req.body.projectName).trim()
-        // console.log(temp.length)
-        if((Object.prototype.constructor(req.body))&&(temp.length !== 0)){
-            let newProjectDetails = {
-                projectName: req.body.projectName,
-               assignTo:req.body.assignTo
-            }
-            activityDao.createProject(newProjectDetails).then(data => {
-            
-                res.status('201').send({
-                    data: req.body
-                })
+            let temp=(req.body.projectName).trim()
+            let temp1=name.trim()
+            // console.log(temp.length)
+            if((temp1.length !== 0)&&(temp.length !== 0)){
+                let newProjectDetails = {
+                    projectName: req.body.projectName,
+                assignTo:req.body.assignTo
+                }
+                activityDao.createProject(newProjectDetails).then(data => {
+                
+                    res.status('201').send({
+                        data: req.body
+                    })
 
-            })
-        }
-        else{
-            
-            
-                res.status(400).send({
-                    payload:{
-                        msg : "project name should not be null"
-                    }
                 })
-               
-        }
+            }
+            else{
+                
+                
+                    res.status(400).send({
+                        payload:{
+                            msg : "project or team  name should not be null"
+                        }
+                    })
+                
+            }
+        }else{res.status(400).send({
+            payload:{
+                msg : "please provide a project name"
+            }
+        })}
     }else{res.status(400).send({
         payload:{
-            msg : "please provide a project name"
+            msg : "pass only one team name"
         }
     })}
 }
