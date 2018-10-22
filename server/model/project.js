@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 // console.log(mongoose)
 var projectSchema = new Schema({
     projectName : String,
-    assignTo : [String],
+    assignTo : [{teamId:String,teamName:String}],
     createdAt : Date,
     status : String,
     dueDate : Date,

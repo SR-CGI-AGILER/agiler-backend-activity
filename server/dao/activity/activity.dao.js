@@ -51,13 +51,15 @@ function findSubTask() {
 function createProject(details) {
     return new Promise(function (resolve, reject) {
         
-
-        // console.log(new Date,  "sdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsf")
+     
+        // console.log(details,  "sdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsf")
         const x = new project({
             // "projectId": details.projectId,
             "projectName": details.projectName,
             "createdAt": new Date,
-            "archiveProject": "false"
+            "archiveProject": "false",
+            "assignTo":details.assignTo
+            
           
         })
         x.save(function (err, data) {
@@ -67,7 +69,101 @@ function createProject(details) {
         })
     })
 }
+function addAssignTo(name) {
+    console.log('here in dao')
+    return new Promise(function(resolve, reject){
+        // project.findById({
+        //     "_id": name.id
+        // },
+        // function (err, data) {
+        //     console.log(err)
+        //     data.assignTo.map(function(a){
+            //    console.log(a.teamName)
+            //    name.assignTo.map(function(e) {
+            //        console.log(e)
+            //         if(a.teamName !== e.teamName ){
+            //         // console.log("hgyhghgh",e)
+            //         data.assignTo.push(e);
+                  
+            //       }
+            //     });
+            // if (a.teamName == name)
+            // });
+           
+            
+            // data.save()
+            // resolve(data)
+        
+            // })
+            name.assignTo.map(function(e) {
+                project.findOne({
+                   "_id": name.id, 
+                   "assignTo.teamName" : e.teamName,
+                   "assignTo.teamId": e.teamId 
+                }).exec(function(err, doc) {
+                    if (err) {
+                        throw err
+                    }else {
+                        console.log(doc)
+                        if(doc === null) {
+                            addTeam({
+                                projectId: name.id,
+                                teamDetails: e
+                            }).then(function(doc) {
+                                resolve(doc)
+                            }).catch(function (err) {
+                                resolve(err)
+                            })
+                        }else {
+                            console.log("this is reject , team is there already")
+                            reject(doc)
+                        }
+                        // console.log(doc, "this is the doc @@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                        // resolve(doc)
+                    }
+                })
 
+            })
+    })
+}
+
+function addTeam(team) {
+    return new Promise(function (resolve, reject) {
+        console.log(team, "this is the team detials")
+        project.findOne({
+            "_id": team.projectId
+        }).exec(function(err, doc) {
+            if(err) {
+                reject(err)
+            }else {
+                console.log("here when the team is getting added ", doc)
+                doc.assignTo.push(team.teamDetails)
+                // console.log(doc, )
+                doc.save().then(function() {
+                    resolve(doc)
+                })
+            }
+        })
+
+    })
+}
+//function createTask(name) {
+    //     return new Promise(function (resolve, reject) {
+    //         console.log("here in DAO", JSON.stringify(name, 1, 1))
+    //         // project.findOneAndUpdate({'_id': name.id}, name.project ,function(err,data) {
+    //         //     // data.task.push(name.task)
+    //         //     if (err) console.log(err)
+    //         //     resolve({"msg": `update successfully ${data}`})
+    //         // })
+    //         project.findById({
+    //             "_id": name.id
+    //         }, function (err, data) {
+    //             data.task.push(name.task);
+    //             data.save()
+    //             resolve(data)
+    //         })
+    
+    //     })
 function createTask(details) {
     // console.log((details.task))
  
@@ -156,7 +252,8 @@ module.exports = {
     findSubTask,
     createProject,
     createTask,
-    createSubTask
+    createSubTask,
+    addAssignTo
     // updateProject,
     // archiveProject
 }
