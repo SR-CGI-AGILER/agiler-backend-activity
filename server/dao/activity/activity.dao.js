@@ -2,6 +2,7 @@ const db = require('../../db-connection/mongo');
 const project = require('../../model/project');
 const task = require('../../model/task');
 const subtask = require('../../model/subtask');
+const team = require('../../model/team');
 
 function findSpecificProject(data) {
     return new Promise(function (resolve, reject) {
@@ -13,7 +14,8 @@ function findSpecificProject(data) {
             resolve(data)
         })
     })
-//     function findProject(project_data) {
+}
+    //     function findProject(project_data) {
 //     return new Promise(function (resolve, reject) {
 //         let a = parseInt(project_data.l);
 //         let b = parseInt(project_data.p);
@@ -35,6 +37,36 @@ function findSpecificProject(data) {
 // }
 // }
 
+
+
+function findTeam(data){
+    
+        return new Promise((resolve,reject)=>{
+        let memberId = data.member;
+    
+        team.find({
+            "teamMembers.memberId":memberId
+        },{"teamName":1}
+        ).exec((err,data)=>{
+            // console.log(err,  data);
+            resolve(data);
+        });
+    });
+}
+
+function findTeamMembers(data){
+    return new Promise((resolve,reject)=>{
+        let teamId = data.teamId;
+
+        team.find({
+            "_id":teamId
+        },{"teamName":1,"teamMembers":1}
+        ).exec((err,data)=>{
+            // console.log(data);
+            resolve(data);
+        });
+
+    });
 }
 
 function findProject(project_data) {
@@ -49,6 +81,54 @@ function findProject(project_data) {
                 resolve(data);
             })
         })
+}
+
+function deleteTeamMember(data){
+    return new Promise((resolve, reject)=>{
+        let teamId = data.teamId;
+        let memberId = data.memberId;
+        //console.log("DAO=====",data, "DAo===");
+        team.findById(
+            {
+                "_id":data.teamId
+            }, function(err,doc) {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    console.log("DOC",doc);
+                    doc.teamMembers.pull(data.memberId);
+                    doc.save();
+                    resolve(doc);
+                }
+            }
+        )
+        // team.teamMembers.pull(memberId);
+        // team.save();
+    });
+}
+
+function addTeamMember(data){
+    return new Promise((resolve,reject)=>{
+        
+        team.findById(
+            {
+                "_id":data.teamId
+            }, function(err, doc) {
+                if (err ) {
+                    reject(err)
+                }else {
+                    console.log(doc)
+                    doc.teamMembers.push({
+                       "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
+                   })
+   
+                   doc.save()
+                   resolve(doc)
+                }               
+            }
+        )
+    })
 }
 
 // function findProject(project_data) {
@@ -224,5 +304,9 @@ module.exports = {
     archiveTask,
     findTask,
     findSubTask,
-    archiveProject
+    archiveProject,
+    findTeam,
+    findTeamMembers,
+    addTeamMember,
+    deleteTeamMember
 }
