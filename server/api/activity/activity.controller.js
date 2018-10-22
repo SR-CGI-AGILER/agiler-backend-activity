@@ -41,7 +41,7 @@ function deleteTeamMemberResponse(req, res){
     };
     console.log("HERE in Controller");
     activityDao.deleteTeamMember(data).then(data=>{
-        res.status().send({
+        res.send({
             data:data
         });
     });

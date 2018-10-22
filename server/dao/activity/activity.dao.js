@@ -87,24 +87,25 @@ function deleteTeamMember(data){
     return new Promise((resolve, reject)=>{
         let teamId = data.teamId;
         let memberId = data.memberId;
-        //console.log("DAO=====",data, "DAo===");
-        team.findById(
+        team.findOne(
             {
-                "_id":data.teamId
-            }, function(err,doc) {
+                "_id":data.teamId,
+                "teamMembers.memberId": data.memberId
+            }, {teamMembers: 1},function(err,doc) {
                 if (err) {
                     reject(err);
                 }
                 else {
-                    console.log("DOC",doc);
-                    doc.teamMembers.pull(data.memberId);
+                    
+                    
+                    doc.teamMembers.pull(doc.teamMembers[0]._id);
+                    
                     doc.save();
                     resolve(doc);
                 }
             }
         )
-        // team.teamMembers.pull(memberId);
-        // team.save();
+        
     });
 }
 
