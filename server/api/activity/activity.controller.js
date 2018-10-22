@@ -11,6 +11,53 @@ function findProjectResponse(req, res) {
         });
     });
 }
+
+function findTeamMembersResponse(req, res) {
+    let data = {
+        teamId: req.params.teamId
+    };
+    activityDao.findTeamMembers(data).then(data=>{
+        res.status('200').send({
+            data: data
+        });
+    });
+}
+
+function addTeamMemberResponse(req,res){
+    let data = {
+        teamId: req.params.teamId
+    };
+    activityDao.addTeamMember(data).then(data=>{
+        res.status('200').send({
+            data: data
+        });
+    });
+}
+
+function deleteTeamMemberResponse(req, res){
+    let data = {
+        teamId: req.params.teamId,
+        memberId: req.params.memberId
+    };
+    console.log("HERE in Controller");
+    activityDao.deleteTeamMember(data).then(data=>{
+        res.send({
+            data:data
+        });
+    });
+}
+
+function findTeamResponse(req, res){
+    let data = {
+        member: req.params.memberId
+    }
+    activityDao.findTeam(data).then(data=>{
+        res.status('200').send({
+            data:data
+        });
+    });
+}
+
 // function findSpecificProjectResponse(req, res) {
 //     activityDao.findSpecificProject({
 //         projectName: req.params.projectName
@@ -157,5 +204,9 @@ module.exports = {
     updateProjectResponse,
     archiveTaskResponse,
     archiveProjectResponse,
-    findTeamProjectsResponse
+    findTeamProjectsResponse,
+    findTeamResponse,
+    findTeamMembersResponse,
+    addTeamMemberResponse,
+    deleteTeamMemberResponse
 }

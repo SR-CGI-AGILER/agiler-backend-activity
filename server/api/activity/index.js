@@ -17,4 +17,11 @@ router.put('/project/:projectId', activityController.archiveProjectResponse)
 router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
 // router.put('tasks/:taskId/subtasks/:subtaskId', activityController.archiveSubTaskResponse)
 
+router.get('/teams/:memberId',activityController.findTeamResponse);
+router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
+
+router.patch('/teams/:teamId', activityController.addTeamMemberResponse);
+// router.delete('/teams/:teamId', activityController.deleteTeamResponse);
+router.delete('/teams/:teamId/:memberId', activityController.deleteTeamMemberResponse);
+
 module.exports = router
