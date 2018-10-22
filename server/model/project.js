@@ -2,7 +2,7 @@ var mongoose = require('../db-connection/mongo');
 var Schema = mongoose.Schema;
 var projectSchema = new Schema({
     projectName : String,
-    assignedTo : [String], // one project can be assigned to multiple teams
+    assignTo : [{teamId:String, teamName:String}], // one project can be assigned to multiple teams
     createdBy: [String],
     createdAt : Date,
     dueDate : Date,

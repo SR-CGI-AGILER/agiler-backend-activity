@@ -13,28 +13,6 @@ function findSpecificProject(data) {
             resolve(data)
         })
     })
-//     function findProject(project_data) {
-//     return new Promise(function (resolve, reject) {
-//         let a = parseInt(project_data.l);
-//         let b = parseInt(project_data.p);
-//         let c = a*b;
-//         project.find({
-
-//         }).limit(a).skip(c).exec(function(err, data) {
-//             // console.log(err, data)
-//             resolve(data)
-//         })
-//     })function findSpecificProjectResponse(req, res) {
-//     activityDao.findSpecificProject({
-//         projectName: req.params.projectName
-//     }).then(data => {
-//         res.status('200').send({
-//             data: data
-//         })
-//     })
-// }
-// }
-
 }
 
 function findProject(project_data) {
@@ -51,36 +29,8 @@ function findProject(project_data) {
         })
 }
 
-// function findProject(project_data) {
-//     return new Promise( function(resolve, reject) {
-//         project.find({
-
-//         }).exec(function(err, data) {
-//             resolve(data);
-//         });
-//     });
-// }
-
-
-
-
-    //    var x = new project({
-    //        "projectId": "123456",
-    //        "projectName": "agiler-1222dasd2",
-    //        "createdAt": new Date(),
-    //        "task": [{
-    //            taskId: "1234",
-    //            text: "fdsfsfsfdsdf"
-    //        }]
-    //    })
-    //    x.save(function(err) {
-    //        if(err) console.log(err)
-    //    })
-
-
 function createProject(details) {
     return new Promise(function (resolve, reject) {
-        // console.log(details, "sdfsdfsdfsdfsdfsdfsdfsdfsdfsfsdfsdfsf")
         const x = new project({
             "projectId": details.projectId,
             "projectName": details.projectName,
@@ -181,10 +131,10 @@ function updateProject(id) {
     })
 }
 
-function archiveProject(name) {
+function archiveProject(project_data) {
     return new Promise(function (resolve, reject) {
         project.findOneAndUpdate({
-            projectName: name.projectName
+            _id: project_data.projectId
         }, {
             $set: {
                 "archiveProject": true
@@ -196,12 +146,12 @@ function archiveProject(name) {
     })
 }
 
-function archiveTask(name) {
+function archiveTask(task_data) {
     return new Promise(function (resolve, reject) {
-        let a = project.task._id; //taskID
-        console.log(a)
-        project.findOneAndUpdate({
+        task.findOneAndUpdate({
                 // project.task._id: name.t_id
+                projectId:task_data.p_id,
+                _id: task_data.t_id
             }, {
                 $set: {
                     "archiveTask": true
@@ -215,6 +165,19 @@ function archiveTask(name) {
     })
 }
 
+function findTeamProjects(project_data) {
+    return new Promise(function (resolve, reject) {
+        let a = parseInt(project_data.l);
+        let b = parseInt(project_data.p);
+        let c = a*b;
+        console.log(c)
+        project.find({"assignTo.teamId": project_data.teamId}).limit(a).skip(c).exec(function (err, data) {
+            console.log(data)
+            resolve(data)
+        })
+    })
+}
+
 module.exports = {
     findSpecificProject,
     findProject,
@@ -224,5 +187,6 @@ module.exports = {
     archiveTask,
     findTask,
     findSubTask,
-    archiveProject
+    archiveProject,
+    findTeamProjects
 }

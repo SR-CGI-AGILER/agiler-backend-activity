@@ -112,7 +112,7 @@ function updateProjectResponse(req, res) {
 
 function archiveTaskResponse(req, res) {
    let data = {
-   
+       p_id:req.params.projectId,
        t_id: req.params.taskId
    };
    console.log(data)
@@ -125,7 +125,7 @@ function archiveTaskResponse(req, res) {
 
 function archiveProjectResponse(req, res) {
     let data = {
-        projectName: req.params.projectName
+        projectId: req.params.projectId
     }
     activityDao.archiveProject(data).then(data => {
         res.status('200').send({
@@ -134,6 +134,18 @@ function archiveProjectResponse(req, res) {
     })
 }
 
+function findTeamProjectsResponse(req, res) {
+    let data = {
+        teamId: req.params.teamId,
+        l: req.query.limit,
+        p: req.query.page
+    }
+    activityDao.findTeamProjects(data).then(data => {
+        res.status('200').send({
+            data: data
+        })
+    })
+}
 
 module.exports = {
     findSpecificProjectResponse,
@@ -144,5 +156,6 @@ module.exports = {
     createTaskResponse,
     updateProjectResponse,
     archiveTaskResponse,
-    archiveProjectResponse
+    archiveProjectResponse,
+    findTeamProjectsResponse
 }

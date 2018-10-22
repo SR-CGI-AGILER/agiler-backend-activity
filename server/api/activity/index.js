@@ -8,12 +8,13 @@ router.get('/projectx/:projectId', activityController.findSpecificProjectRespons
 // router.put('/project/:projectId/tasks', activityController.createTaskResponse) 
 router.get('/projects/:projectId/tasks/:limit?/:page?', activityController.findTaskResponse)
 router.get('/project/tasks/:taskId/subtasks/:limit?/:page?', activityController.findSubTaskResponse)
+router.get('/teams/:teamId/projects/:limit?/:page?', activityController.findTeamProjectsResponse)
 // router.post('/project', activityController.createProjectResponse) 
 // router.post('/tasks', activityController.createTaskResponse)
 // router.post('/project/:projectId/tasks', activityController.createTaskResponse)
 // router.put('/project/:projectName', activityController.updateProjectResponse)
-// router.put('/project/:projectName', activityController.archiveProjectResponse)
-// router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
-// router.put('tasks/:taskId/subtasks', activityController.archiveSubTaskResponse)
+router.put('/project/:projectId', activityController.archiveProjectResponse)
+router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
+// router.put('tasks/:taskId/subtasks/:subtaskId', activityController.archiveSubTaskResponse)
 
 module.exports = router
