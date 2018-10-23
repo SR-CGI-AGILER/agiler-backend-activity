@@ -4,6 +4,8 @@ const task = require('../../model/task');
 const subtask = require('../../model/subtask');
 const team = require('../../model/team');
 
+const async = require('async');
+
 function findSpecificProject(data) {
     return new Promise(function (resolve, reject) {
         console.log(data)
@@ -295,18 +297,85 @@ function archiveTask(task_data) {
     })
 }
 
-function findTeamProjects(project_data) {
+function findMemberProjects(project_data) {
+    return new Promise(function (resolve, reject){
+        team.find({"teamMembers.memberId": project_data.memberId}, {"_id": 1})
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err)
+                reject(err)
+            }else {
+                // console.log(doc)
+                resolve(doc)
+            }
+        })
+    })
+}
+function findMemberTeams(teamId) {
+    return new Promise(function (resolve, reject) {
+        project.find({"assignTo.teamId": teamId}, {"projectName": 1})
+        .exec(function (err, doc) {
+            if (err) {
+                console.log(err, "INSIDE THE LOOP")
+                reject(err)
+            }else {
+                resolve(doc)
+            }
+        })
+    })
+}
+function findMemberTeamProject(doc){
+    // console.log(doc, "finding the projects")
+    return new Promise(function (resolve, reject) {
+            let arr = []
+            doc.map(function(e) {
+                arr.push(findMemberTeams(e._id));
+            })
+            let data = Promise.all(arr)
+            // console.log(data)
+
+            data.then(function(result) {
+                  result = result.reduce(function(acc = [], val){
+                      let a = acc.concat(val)
+                    //   console.log(a,"ajkld")
+                    return acc.concat(val)
+                })
+                resolve(result)
+            })
+    })
+}
+
+function findMemberTeamProjects(project_data) {
     return new Promise(function (resolve, reject) {
         let a = parseInt(project_data.l);
         let b = parseInt(project_data.p);
         let c = a*b;
-        console.log(c)
-        project.find({"assignTo.teamId": project_data.teamId}).limit(a).skip(c).exec(function (err, data) {
-            console.log(data)
-            resolve(data)
-        })
+        
+        // team.find({"teamMembers.memberId":project_data.memberId},{"_id":1}).exec(function(err, data){
+        //     //let response=[];
+        //     data.map((e)=>{
+        //         project.find({"assignTo.teamId": e._id},{"projectName":1}).exec((function(err, data){
+        //             // console.log(data);
+        //             response = Object.assign(response, data);
+        //             // console.log(response);
+
+                    
+        //         }))
+        //     })
+        //     // console.log(response);
+            
+        // })
+        
+        // // console.log("above");
+        // project.find({"assignTo.teamId": project_data.teamId},{"projectName":1}).limit(a).skip(c).exec(function (err, data) {
+        //     console.log(data)
+        //     resolve(data)
+        // })
+        // console.log("below");
     })
 }
+
+
 
 module.exports = {
     findSpecificProject,
@@ -318,9 +387,11 @@ module.exports = {
     findTask,
     findSubTask,
     archiveProject,
-    findTeamProjects,
+    findMemberTeamProjects,
     findTeam,
     findTeamMembers,
     addTeamMember,
-    deleteTeamMember
+    deleteTeamMember,
+    findMemberProjects,
+    findMemberTeamProject
 }

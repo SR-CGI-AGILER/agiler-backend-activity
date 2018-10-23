@@ -181,15 +181,19 @@ function archiveProjectResponse(req, res) {
     })
 }
 
-function findTeamProjectsResponse(req, res) {
+function findMemberTeamProjectsResponse(req, res) {
     let data = {
-        teamId: req.params.teamId,
-        l: req.query.limit,
-        p: req.query.page
+        memberId: req.params.memberId,
+        l: req.query.limit || 10,
+        p: req.query.page || 0
     }
-    activityDao.findTeamProjects(data).then(data => {
-        res.status('200').send({
-            data: data
+    activityDao.findMemberProjects(data).then((data) => {
+        activityDao.findMemberTeamProject(data).then(function (data) {
+            console.log(data, "FINAL RESULTS SHOULD COME HERE SO THAT U CAN SEND THAT BACK IN RESPOMSE")
+            res.send({
+                length: data.length,
+                payload: data
+            })
         })
     })
 }
@@ -204,7 +208,7 @@ module.exports = {
     updateProjectResponse,
     archiveTaskResponse,
     archiveProjectResponse,
-    findTeamProjectsResponse,
+    findMemberTeamProjectsResponse,
     findTeamResponse,
     findTeamMembersResponse,
     addTeamMemberResponse,

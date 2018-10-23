@@ -8,7 +8,7 @@ router.get('/projectx/:projectId', activityController.findSpecificProjectRespons
 // router.put('/project/:projectId/tasks', activityController.createTaskResponse) 
 router.get('/projects/:projectId/tasks/:limit?/:page?', activityController.findTaskResponse)
 router.get('/project/tasks/:taskId/subtasks/:limit?/:page?', activityController.findSubTaskResponse)
-router.get('/teams/:teamId/projects/:limit?/:page?', activityController.findTeamProjectsResponse)
+router.get('/member/:memberId/projects/:limit?/:page?', activityController.findMemberTeamProjectsResponse)//find projects of a specific team
 // router.post('/project', activityController.createProjectResponse) 
 // router.post('/tasks', activityController.createTaskResponse)
 // router.post('/project/:projectId/tasks', activityController.createTaskResponse)
@@ -17,7 +17,7 @@ router.put('/project/:projectId', activityController.archiveProjectResponse)
 router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
 // router.put('tasks/:taskId/subtasks/:subtaskId', activityController.archiveSubTaskResponse)
 
-router.get('/teams/:memberId',activityController.findTeamResponse);
+router.get('/teams/:memberId',activityController.findTeamResponse);//find teams of a specific member
 router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
 
 router.patch('/teams/:teamId', activityController.addTeamMemberResponse);
