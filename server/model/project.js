@@ -1,8 +1,7 @@
-// var mongoose = require('mongoose');
 var mongoose = require('../db-connection/mongo');
 var Schema = mongoose.Schema;
 
-// console.log(mongoose)
+
 var projectSchema = new Schema({
     projectName : String,
     assignTo : [{teamId:String,teamName:String}],
@@ -16,6 +15,5 @@ var projectSchema = new Schema({
 ;
 
 var project = mongoose.model('project', projectSchema);
-// var test = mongoose.model('test',test);
 
 module.exports = project;
