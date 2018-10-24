@@ -13,14 +13,7 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
   });
-  
 
-// app.use(bodyParser({
-//     urlEncoded: {
-//         extended: true
-//     }
-    
-// }));
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
@@ -30,4 +23,4 @@ app.use(function (req, res, next) {
     next();
 });
 const port = process.env.PORT || 8000
-app.listen(port, () => console.log('I am running on ', port))
+app.listen(8000, `0.0.0.0`,() => console.log('I am running on ', port));
