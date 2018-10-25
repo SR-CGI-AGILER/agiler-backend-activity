@@ -3,8 +3,8 @@ var mongoose = require('../db-connection/mongo');
 var Schema = mongoose.Schema;
 var taskSchema = new Schema({
     taskName: String,
-    assignedTo: [String],
-    createdBy: String,
+    assignTo: [{memberId:String}],
+    createdBy: {memberId:String},
     createdAt: Date,
     dueDate: Date,
     status: String,

@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 var subTaskSchema = new Schema({
     // subTaskId: Number,
     subTaskName: String,
-    assignedTo: [String],
-    createdBy: String,
+    assignTo: [{memberId:String}],
+    createdBy: {memberId:String},
     createdAt: Date,
     dueDate: Date,
     status: String,

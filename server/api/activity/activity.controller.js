@@ -2,8 +2,8 @@ const activityDao = require('../../dao/activity/activity.dao')
 
 function findProjectResponse(req, res) {
         let data = {
-            l:req.query.limit,
-            p:req.query.page
+            l:req.query.limit || 10,
+            p:req.query.page || 0
         };
     activityDao.findProject(data).then(data => {
         res.status('200').send({
@@ -25,7 +25,8 @@ function findTeamMembersResponse(req, res) {
 
 function addTeamMemberResponse(req,res){
     let data = {
-        teamId: req.params.teamId
+        teamId: req.params.teamId,
+        memberId: req.params.memberId
     };
     activityDao.addTeamMember(data).then(data=>{
         res.status('200').send({
@@ -39,7 +40,6 @@ function deleteTeamMemberResponse(req, res){
         teamId: req.params.teamId,
         memberId: req.params.memberId
     };
-    console.log("HERE in Controller");
     activityDao.deleteTeamMember(data).then(data=>{
         res.send({
             data:data
@@ -58,16 +58,6 @@ function findTeamResponse(req, res){
     });
 }
 
-// function findSpecificProjectResponse(req, res) {
-//     activityDao.findSpecificProject({
-//         projectName: req.params.projectName
-//     }).then(data => {
-//         res.status('200').send({
-//             data: data
-//         })
-//     })
-// }
-
 function findSpecificProjectResponse(req, res) {
     let data = {
         p:req.params.projectId
@@ -80,12 +70,11 @@ function findSpecificProjectResponse(req, res) {
 }
 
 function findTaskResponse(req, res) {
-   console.log("whjat is happening?")
     let data = 
         {
             id:req.params.projectId,
-            l:req.query.limit,
-            p:req.query.page
+            l:req.query.limit || 10,
+            p:req.query.page || 0
         };
     activityDao.findTask(data).then(data => {
         res.status('200').send({
@@ -97,8 +86,8 @@ function findTaskResponse(req, res) {
 function findSubTaskResponse(req, res) {
     let data = {
         id:req.params.taskId,
-        l:req.query.limit,
-        p:req.query.page
+        l:req.query.limit || 10,
+        p:req.query.page || 0
     };
     activityDao.findSubTask(data).then(data=> {
         res.status('200').send({
@@ -127,7 +116,6 @@ function createTaskResponse(req, res) {
        taskName: req.body.taskName
    };
     activityDao.createTask(data).then(data => {
-        console.log(req.params.id)
         res.status('200').send({
             data: data
             // data1: req.params.projectId
@@ -162,7 +150,6 @@ function archiveTaskResponse(req, res) {
        p_id:req.params.projectId,
        t_id: req.params.taskId
    };
-   console.log(data)
    activityDao.archiveTask(data).then(data=> {
        res.status('200').send({
            data:data
@@ -189,11 +176,21 @@ function findMemberTeamProjectsResponse(req, res) {
     }
     activityDao.findMemberProjects(data).then((data) => {
         activityDao.findMemberTeamProject(data).then(function (data) {
-            console.log(data, "FINAL RESULTS SHOULD COME HERE SO THAT U CAN SEND THAT BACK IN RESPOMSE")
             res.send({
                 length: data.length,
                 payload: data
             })
+        })
+    })
+}
+
+function findTeamProjectsResponse(req, res) {
+    let data = {
+        teamId: req.params.teamId
+    };
+    activityDao.findTeamProjects(data).then((data) => {
+        res.status('200').send({
+            data:data
         })
     })
 }
@@ -209,6 +206,7 @@ module.exports = {
     archiveTaskResponse,
     archiveProjectResponse,
     findMemberTeamProjectsResponse,
+    findTeamProjectsResponse,
     findTeamResponse,
     findTeamMembersResponse,
     addTeamMemberResponse,

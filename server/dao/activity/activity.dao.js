@@ -17,28 +17,6 @@ function findSpecificProject(data) {
         })
     })
 }
-    //     function findProject(project_data) {
-//     return new Promise(function (resolve, reject) {
-//         let a = parseInt(project_data.l);
-//         let b = parseInt(project_data.p);
-//         let c = a*b;
-//         project.find({
-
-//         }).limit(a).skip(c).exec(function(err, data) {
-//             // console.log(err, data)
-//             resolve(data)
-//         })
-//     })function findSpecificProjectResponse(req, res) {
-//     activityDao.findSpecificProject({
-//         projectName: req.params.projectName
-//     }).then(data => {
-//         res.status('200').send({
-//             data: data
-//         })
-//     })
-// }
-// }
-
 
 
 function findTeam(data){
@@ -123,7 +101,9 @@ function addTeamMember(data){
                 }else {
                     console.log(doc)
                     doc.teamMembers.push({
-                       "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
+                    //    "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
+                    // "memberId": "2fdbb753-9951-4011-89e1-e33f26f2ed84"
+                    "memberId":doc.memberId
                    })
    
                    doc.save()
@@ -133,33 +113,6 @@ function addTeamMember(data){
         )
     })
 }
-
-// function findProject(project_data) {
-//     return new Promise( function(resolve, reject) {
-//         project.find({
-
-//         }).exec(function(err, data) {
-//             resolve(data);
-//         });
-//     });
-// }
-
-
-
-
-    //    var x = new project({
-    //        "projectId": "123456",
-    //        "projectName": "agiler-1222dasd2",
-    //        "createdAt": new Date(),
-    //        "task": [{
-    //            taskId: "1234",
-    //            text: "fdsfsfsfdsdf"
-    //        }]
-    //    })
-    //    x.save(function(err) {
-    //        if(err) console.log(err)
-    //    })
-
 
 function createProject(details) {
     return new Promise(function (resolve, reject) {
@@ -194,29 +147,6 @@ function createTask(details) {
         });
     });
 }
-
-
-
-// function createTask(name) {
-//     return new Promise(function (resolve, reject) {
-//         console.log("here in DAO", JSON.stringify(name, 1, 1))
-//         // project.findOneAndUpdate({'_id': name.id}, name.project ,function(err,data) {
-//         //     // data.task.push(name.task)
-//         //     if (err) console.log(err)
-//         //     resolve({"msg": `update successfully ${data}`})
-//         // })
-//         project.findById({
-//             "_id": name.id
-//         }, function (err, data) {
-//             data.task.push(name.task);
-//             data.save()
-//             resolve(data)
-//         })
-
-//     })
-
-// }
-
 
 function findTask(details) {
     return new Promise(function (resolve, reject) {
@@ -305,7 +235,6 @@ function findMemberProjects(project_data) {
                 console.log(err)
                 reject(err)
             }else {
-                // console.log(doc)
                 resolve(doc)
             }
         })
@@ -325,7 +254,6 @@ function findMemberTeams(teamId) {
     })
 }
 function findMemberTeamProject(doc){
-    // console.log(doc, "finding the projects")
     return new Promise(function (resolve, reject) {
             let arr = []
             doc.map(function(e) {
@@ -336,8 +264,7 @@ function findMemberTeamProject(doc){
 
             data.then(function(result) {
                   result = result.reduce(function(acc = [], val){
-                      let a = acc.concat(val)
-                    //   console.log(a,"ajkld")
+                
                     return acc.concat(val)
                 })
                 resolve(result)
@@ -345,37 +272,13 @@ function findMemberTeamProject(doc){
     })
 }
 
-function findMemberTeamProjects(project_data) {
+function findTeamProjects(team_data){
     return new Promise(function (resolve, reject) {
-        let a = parseInt(project_data.l);
-        let b = parseInt(project_data.p);
-        let c = a*b;
-        
-        // team.find({"teamMembers.memberId":project_data.memberId},{"_id":1}).exec(function(err, data){
-        //     //let response=[];
-        //     data.map((e)=>{
-        //         project.find({"assignTo.teamId": e._id},{"projectName":1}).exec((function(err, data){
-        //             // console.log(data);
-        //             response = Object.assign(response, data);
-        //             // console.log(response);
-
-                    
-        //         }))
-        //     })
-        //     // console.log(response);
-            
-        // })
-        
-        // // console.log("above");
-        // project.find({"assignTo.teamId": project_data.teamId},{"projectName":1}).limit(a).skip(c).exec(function (err, data) {
-        //     console.log(data)
-        //     resolve(data)
-        // })
-        // console.log("below");
+        project.find({"assignTo.teamId": team_data.teamId}, {"projectName":1}).exec(function(err, data){
+            resolve(data)
+        })
     })
 }
-
-
 
 module.exports = {
     findSpecificProject,
@@ -387,11 +290,11 @@ module.exports = {
     findTask,
     findSubTask,
     archiveProject,
-    findMemberTeamProjects,
+    findMemberProjects,
     findTeam,
     findTeamMembers,
     addTeamMember,
     deleteTeamMember,
-    findMemberProjects,
-    findMemberTeamProject
+    findMemberTeamProject,
+    findTeamProjects
 }
