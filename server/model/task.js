@@ -1,6 +1,7 @@
+
 var mongoose = require('../db-connection/mongo');
-// var project = require('./project');
 var Schema = mongoose.Schema;
+
 var taskSchema = new Schema({
     taskName: String,
     assignTo: [{memberId:String}],
@@ -13,6 +14,8 @@ var taskSchema = new Schema({
     projectId: String
 });
 
+
 var task = mongoose.model('task', taskSchema);
+
 
 module.exports = task;

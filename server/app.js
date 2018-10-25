@@ -1,10 +1,10 @@
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
 const activity = require('./api/activity/index');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
+const logger = require('morgan')
 
-app.use(logger('dev'));
+app.use(logger('dev'))
 
 
 app.use(function(req, res, next) {
@@ -13,13 +13,8 @@ app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
     next();
   });
-  
 
-app.use(bodyParser({
-    urlEncoded: {
-        extended: true
-    }
-}));
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
 

@@ -6,7 +6,8 @@ var teamSchema = new Schema({
     teamName: String,
     teamMembers: [{memberId:String}],
     createdBy: String,
-    projects: [{projectId:String}]
+    projects: [{projectId:String}],
+    createdAt : Date
 });
 
 var team = mongoose.model('team', teamSchema);

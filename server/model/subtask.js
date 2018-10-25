@@ -1,8 +1,9 @@
+
 var mongoose = require('../db-connection/mongo');
 var Schema = mongoose.Schema;
 var subTaskSchema = new Schema({
     // subTaskId: Number,
-    subTaskName: String,
+    subtaskName: String,
     assignTo: [{memberId:String}],
     createdBy: {memberId:String},
     createdAt: Date,
@@ -13,6 +14,8 @@ var subTaskSchema = new Schema({
     taskId: String
 });
 
+
 var subtask = mongoose.model('subtask', subTaskSchema);
+
 
 module.exports = subtask;
