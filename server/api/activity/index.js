@@ -9,6 +9,7 @@ router.post('/project/:projectId/assignTo',activityController.addAssignToRespons
 router.post('/project/projectId/task', activityController.createTaskResponse) 
 router.post('/task/taskId/subtask', activityController.createSubTaskResponse) 
 router.get('/task', activityController.findTaskResponse) 
+router.get('/teams/:teamId/projects', activityController.findTeamProjectsResponse)
 router.get('/subtask', activityController.findSubTaskResponse) 
 router.get('/project/:limit?/:page?', activityController.findProjectResponse)
 router.get('/projectx/:projectId', activityController.findSpecificProjectResponse)
