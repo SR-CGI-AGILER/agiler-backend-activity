@@ -22,5 +22,8 @@ router.get('/teams/:memberId',activityController.findTeamResponse);
 router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
 router.patch('/teams/:teamId', activityController.addTeamMemberResponse);
 router.delete('/teams/:teamId/:memberId', activityController.deleteTeamMemberResponse);
+router.delete('/project/:projectId', activityController.deleteProjectResponse);
+router.delete('/tasks/:taskId', activityController.deleteTaskResponse);
+router.delete('/teams/:teamId', activityController.deleteTeamResponse);
 
 module.exports = router

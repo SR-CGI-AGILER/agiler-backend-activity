@@ -19,29 +19,32 @@ function findSpecificProject(data) {
 }
 
 
-function findTeam(data){
-    
-        return new Promise((resolve,reject)=>{
+function findTeam(data) {
+
+    return new Promise((resolve, reject) => {
         let memberId = data.member;
-    
+
         team.find({
-            "teamMembers.memberId":memberId
-        },{"teamName":1}
-        ).exec((err,data)=>{
+            "teamMembers.memberId": memberId
+        }, {
+            "teamName": 1
+        }).exec((err, data) => {
             // console.log(err,  data);
             resolve(data);
         });
     });
 }
 
-function findTeamMembers(data){
-    return new Promise((resolve,reject)=>{
+function findTeamMembers(data) {
+    return new Promise((resolve, reject) => {
         let teamId = data.teamId;
 
         team.find({
-            "_id":teamId
-        },{"teamName":1,"teamMembers":1}
-        ).exec((err,data)=>{
+            "_id": teamId
+        }, {
+            "teamName": 1,
+            "teamMembers": 1
+        }).exec((err, data) => {
             // console.log(data);
             resolve(data);
         });
@@ -54,63 +57,60 @@ function findProject(project_data) {
         // console.log(project_data)
         let a = parseInt(project_data.l);
         let b = parseInt(project_data.p);
-        let c = a*b;
+        let c = a * b;
         console.log(c)
-        project.find().limit(a).skip(c).exec(function(err, data) {
-                console.log(data);
-                resolve(data);
-            })
+        project.find().limit(a).skip(c).exec(function (err, data) {
+            console.log(data);
+            resolve(data);
         })
+    })
 }
 
-function deleteTeamMember(data){
-    return new Promise((resolve, reject)=>{
+function deleteTeamMember(data) {
+    return new Promise((resolve, reject) => {
         let teamId = data.teamId;
         let memberId = data.memberId;
-        team.findOne(
-            {
-                "_id":data.teamId,
-                "teamMembers.memberId": data.memberId
-            }, {teamMembers: 1},function(err,doc) {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    
-                    
-                    doc.teamMembers.pull(doc.teamMembers[0]._id);
-                    
-                    doc.save();
-                    resolve(doc);
-                }
+        team.findOne({
+            "_id": data.teamId,
+            "teamMembers.memberId": data.memberId
+        }, {
+            teamMembers: 1
+        }, function (err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+
+
+                doc.teamMembers.pull(doc.teamMembers[0]._id);
+
+                doc.save();
+                resolve(doc);
             }
-        )
-        
+        })
+
     });
 }
 
-function addTeamMember(data){
-    return new Promise((resolve,reject)=>{
-        
-        team.findById(
-            {
-                "_id":data.teamId
-            }, function(err, doc) {
-                if (err ) {
-                    reject(err)
-                }else {
-                    console.log(doc)
-                    doc.teamMembers.push({
+function addTeamMember(data) {
+    return new Promise((resolve, reject) => {
+
+        team.findById({
+            "_id": data.teamId
+        }, function (err, doc) {
+            if (err) {
+                reject(err)
+            } else {
+                console.log(doc)
+                doc.teamMembers.push({
                     //    "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
                     // "memberId": "2fdbb753-9951-4011-89e1-e33f26f2ed84"
-                    "memberId":doc.memberId
-                   })
-   
-                   doc.save()
-                   resolve(doc)
-                }               
+                    "memberId": doc.memberId
+                })
+
+                doc.save()
+                resolve(doc)
             }
-        )
+        })
     })
 }
 
@@ -154,24 +154,26 @@ function findTask(details) {
         let a = parseInt(details.l);
         let b = parseInt(details.p);
         console.log(a);
-        let c = a*b;
-        task.find({"projectId": details.id}).limit(a).skip(c).exec(function(err, data) {
-                // console.log(data);
-                resolve(data);
-            });
+        let c = a * b;
+        task.find({
+            "projectId": details.id
+        }).limit(a).skip(c).exec(function (err, data) {
+            // console.log(data);
+            resolve(data);
         });
+    });
 }
 
 function findSubTask(subtask_data) {
     return new Promise(function (resolve, reject) {
         let a = parseInt(subtask_data.l);
         let b = parseInt(subtask_data.p);
-        let c = a*b;
+        let c = a * b;
         subtask.find({
-            "taskId":subtask_data.id
+            "taskId": subtask_data.id
         }).limit(a).skip(c).exec(function (err, data) {
             console.log("in sub-task model");
-            resolve(data); 
+            resolve(data);
         });
     });
 }
@@ -212,7 +214,7 @@ function archiveTask(task_data) {
     return new Promise(function (resolve, reject) {
         task.findOneAndUpdate({
                 // project.task._id: name.t_id
-                projectId:task_data.p_id,
+                projectId: task_data.p_id,
                 _id: task_data.t_id
             }, {
                 $set: {
@@ -228,54 +230,107 @@ function archiveTask(task_data) {
 }
 
 function findMemberProjects(project_data) {
-    return new Promise(function (resolve, reject){
-        team.find({"teamMembers.memberId": project_data.memberId}, {"_id": 1})
-        .exec(function (err, doc) {
-            if (err) {
-                console.log(err)
-                reject(err)
-            }else {
-                resolve(doc)
-            }
-        })
+    return new Promise(function (resolve, reject) {
+        team.find({
+                "teamMembers.memberId": project_data.memberId
+            }, {
+                "_id": 1
+            })
+            .exec(function (err, doc) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                } else {
+                    resolve(doc)
+                }
+            })
     })
 }
+
 function findMemberTeams(teamId) {
     return new Promise(function (resolve, reject) {
-        project.find({"assignTo.teamId": teamId}, {"projectName": 1})
-        .exec(function (err, doc) {
-            if (err) {
-                console.log(err, "INSIDE THE LOOP")
-                reject(err)
-            }else {
-                resolve(doc)
-            }
+        project.find({
+                "assignTo.teamId": teamId
+            }, {
+                "projectName": 1
+            })
+            .exec(function (err, doc) {
+                if (err) {
+                    console.log(err, "INSIDE THE LOOP")
+                    reject(err)
+                } else {
+                    resolve(doc)
+                }
+            })
+    })
+}
+
+function findMemberTeamProject(doc) {
+    return new Promise(function (resolve, reject) {
+        let arr = []
+        doc.map(function (e) {
+            arr.push(findMemberTeams(e._id));
+        })
+        let data = Promise.all(arr)
+        // console.log(data)
+
+        data.then(function (result) {
+            result = result.reduce(function (acc = [], val) {
+
+                return acc.concat(val)
+            })
+            resolve(result)
         })
     })
 }
-function findMemberTeamProject(doc){
-    return new Promise(function (resolve, reject) {
-            let arr = []
-            doc.map(function(e) {
-                arr.push(findMemberTeams(e._id));
-            })
-            let data = Promise.all(arr)
-            // console.log(data)
 
-            data.then(function(result) {
-                  result = result.reduce(function(acc = [], val){
-                
-                    return acc.concat(val)
-                })
-                resolve(result)
-            })
+function findTeamProjects(team_data) {
+    return new Promise(function (resolve, reject) {
+        project.find({
+            "assignTo.teamId": team_data.teamId
+        }, {
+            "projectName": 1
+        }).exec(function (err, data) {
+            resolve(data)
+        })
     })
 }
 
-function findTeamProjects(team_data){
+function deleteProject(project_data) {
     return new Promise(function (resolve, reject) {
-        project.find({"assignTo.teamId": team_data.teamId}, {"projectName":1}).exec(function(err, data){
-            resolve(data)
+        project.deleteOne({
+            "_id": project_data.projectId
+        }).exec(function (err, data) {
+            if (err)
+                reject(err)
+            else
+                resolve(data)
+        })
+    })
+}
+
+function deleteTask(task_data) {
+    return new Promise(function (resolve, reject) {
+        task.deleteOne({
+            "_id": task_data.taskId
+        }).exec(function (err, data) {
+            if (err)
+                reject(err)
+            else
+                resolve(data)
+        })
+    })
+}
+
+function deleteTeam(team_data) {
+    return new Promise(function (resolve, reject) {
+        team.deleteOne({
+            "_id": team_data.teamId
+        }).exec(function (err, data) {
+            if (err)
+                reject(err)
+            else
+                resolve(data)
         })
     })
 }
@@ -296,5 +351,8 @@ module.exports = {
     addTeamMember,
     deleteTeamMember,
     findMemberTeamProject,
-    findTeamProjects
+    findTeamProjects,
+    deleteProject,
+    deleteTask,
+    deleteTeam
 }

@@ -414,6 +414,39 @@ function findTeamProjectsResponse(req, res) {
     })
 }
 
+function deleteProjectResponse(req, res) {
+    let data = {
+        projectId: req.params.projectId
+    };
+    activityDao.deleteProject(data).then((data) => {
+        res.status('200').send({
+            data:data
+        })
+    })
+}
+
+function deleteTaskResponse(req, res) {
+    let data = {
+        taskId: req.params.taskId
+    };
+    activityDao.deleteTask(data).then((data) => {
+        res.status('200').send({
+            data : data
+        })
+    })
+}
+
+function deleteTeamResponse(req, res) {
+    let data = {
+        teamId: req.params.teamId
+    };
+    activityDao.deleteTeam(data).then((data) => {
+        res.status('200').send({
+            data:data
+        })
+    })
+}
+
 module.exports = {
     findSpecificProjectResponse,
     findProjectResponse,
@@ -433,5 +466,8 @@ module.exports = {
     addTeamMemberResponse,
     deleteTeamMemberResponse,
     createTeamResponse,
-    findAllTeamResponse
+    findAllTeamResponse,
+    deleteProjectResponse,
+    deleteTaskResponse,
+    deleteTeamResponse
 }
