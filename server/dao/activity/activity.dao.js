@@ -401,7 +401,10 @@ function findMemberTeamProject(doc) {
         let data = Promise.all(arr)
         // console.log(data)
 
-        data.then(function (result) {
+        data.then(function (err, result) {
+            if(err){
+                reject(err)
+            }
             result = result.reduce(function (acc = [], val) {
 
               
