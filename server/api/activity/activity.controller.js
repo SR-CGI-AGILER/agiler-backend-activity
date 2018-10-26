@@ -82,26 +82,26 @@ function findTeamResponse(req, res) {//team
 }
 
 function createProjectResponse(req, res) {
-    let projectName = req.body.projectName.projectName
-    if(req.body.assignTo){
-        name1 = req.body.assignTo.map(function (e) {
+    let projectName = req.body.projectName
+    // if(req.body.assignTo){
+    //     name1 = req.body.assignTo.map(function (e) {
 
-            id = e.teamId,
-                name = e.teamName
+    //         id = e.teamId,
+    //             name = e.teamName
 
-        });
+    //     });
 
 
         if ((req.body.assignTo).length == 1) {
-            if (projectName && name ) {
+            if (projectName) {
 
                 console.log(projectName,"ffhgfhgfhg")
                 let temp = (projectName).trim()
                 
-                let temp1 = name.trim()
-                if ((temp1.length !== 0) && (temp.length !== 0)) {
+                // let temp1 = name.trim()
+                if (temp.length !== 0) {
                     let newProjectDetails = {
-                        projectName: req.body.projectName.projectName,
+                        projectName: req.body.projectName,
                         assignTo: req.body.assignTo,
                         teamId:req.params.teamId
                     }
@@ -112,17 +112,17 @@ function createProjectResponse(req, res) {
                         })
 
                     })
-                }
-                else {
+                // }
+                // else {
 
 
-                    res.status(400).send({
-                        payload: {
-                            msg: "project or team  name should not be null"
-                        }
-                    })
+                //     res.status(400).send({
+                //         payload: {
+                //             msg: "project or team  name should not be null"
+                //         }
+                //     })
 
-                }
+                // }
             } else {
                 res.status(400).send({
                     payload: {
