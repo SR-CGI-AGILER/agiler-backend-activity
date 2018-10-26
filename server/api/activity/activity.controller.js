@@ -409,6 +409,17 @@ function findMemberTeamProjectsResponse(req, res) {
     })
 }
 
+function findTeamProjectsResponse(req, res) {
+    let data = {
+        teamId: req.params.teamId
+    };
+    activityDao.findTeamProjects(data).then((data) => {
+        res.status('200').send({
+            data:data
+        })
+    })
+ }
+
 module.exports = {
     findSpecificProjectResponse,
     findProjectResponse,
@@ -427,5 +438,6 @@ module.exports = {
     addTeamMemberResponse,
     deleteTeamMemberResponse,
     createTeamResponse,
-    findAllTeamResponse
+    findAllTeamResponse,
+    findTeamProjectsResponse
 }

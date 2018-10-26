@@ -18,7 +18,7 @@ router.get('/member/:memberId/projects/:limit?/:page?', activityController.findM
 router.put('/project/:projectId', activityController.archiveProjectResponse)
 router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
 router.get('/teams/:memberId',activityController.findTeamResponse);
-
+router.get('/teams/:teamId/projects', activityController.findTeamProjectsResponse);
 router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
 router.patch('/teams/:teamId/:memberId', activityController.addTeamMemberResponse);
 router.delete('/teams/:teamId/:memberId', activityController.deleteTeamMemberResponse);

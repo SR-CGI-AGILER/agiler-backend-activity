@@ -339,6 +339,13 @@ function findMemberTeamProject(doc) {
     })
 }
 
+function findTeamProjects(team_data){
+    return new Promise(function (resolve, reject) {
+        project.find({"assignTo.teamId": team_data.teamId}, {"projectName":1}).exec(function(err, data){
+            resolve(data)
+        })
+    })
+ }
 
 
 
@@ -363,5 +370,6 @@ module.exports = {
     deleteTeamMember,
     findMemberProjects,
     findMemberTeamProject,
-    findAllTeam
+    findAllTeam,
+    findTeamProjects
 }
