@@ -44,8 +44,10 @@ function findTeamMembersResponse(req, res) {
 
 function addTeamMemberResponse(req, res) {
     let data = {
-        teamId: req.params.teamId
+        teamId: req.params.teamId,
+        memberId: req.params.memberId
     };
+    console.log(data,"in controller");
     activityDao.addTeamMember(data).then(data => {
         res.status('200').send({
             data: data
@@ -80,7 +82,7 @@ function findTeamResponse(req, res) {//team
 }
 
 function createProjectResponse(req, res) {
-    let projectName = req.body.projectName
+    let projectName = req.body.projectName.projectName
     if(req.body.assignTo){
         name1 = req.body.assignTo.map(function (e) {
 
@@ -93,13 +95,15 @@ function createProjectResponse(req, res) {
         if ((req.body.assignTo).length == 1) {
             if (projectName && name ) {
 
-
-                let temp = (req.body.projectName).trim()
+                console.log(projectName,"ffhgfhgfhg")
+                let temp = (projectName).trim()
+                
                 let temp1 = name.trim()
                 if ((temp1.length !== 0) && (temp.length !== 0)) {
                     let newProjectDetails = {
-                        projectName: req.body.projectName,
-                        assignTo: req.body.assignTo
+                        projectName: req.body.projectName.projectName,
+                        assignTo: req.body.assignTo,
+                        teamId:req.params.teamId
                     }
                     activityDao.createProject(newProjectDetails).then(data => {
 
@@ -204,6 +208,7 @@ function createTaskResponse(req, res) {
             let data = {
                 id: req.params.projectId,
                 task: req.body
+
             }
             activityDao.createTask(data).then(data => {
                 res.status('200').send({
@@ -268,15 +273,17 @@ function createSubTaskResponse(req, res) {
 }
 
 function createTeamResponse(req,res){//create teammmm
-    if (req.body.teamName) {
+    if (req.body.teamName.teamName) {
         
-        let temp = (req.body.teamName).trim()
+        let temp = (req.body.teamName.teamName).trim()
         if ((Object.prototype.constructor(req.body)) && (temp.length !== 0)) {
             let data = {
-                team: req.body
+                teamName: req.body.teamName.teamName,
+                memberId: req.params.memberId
+
             }
             activityDao.createTeam(data).then(data => {
-                res.status('200').send({
+                res.status('201').send({
                     data: req.body
                 })
 

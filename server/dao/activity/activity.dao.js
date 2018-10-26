@@ -7,13 +7,18 @@ const async = require('async');
 
 function createProject(details) {
     return new Promise(function (resolve, reject) {
-        const x = new project({
-            "projectName": details.projectName,
-            "createdAt": new Date,
-            "archiveProject": "false",
-            "assignTo": details.assignTo
-        })
-        x.save(function (err, data) {
+        console.log(details.assignTo[0].teamName)
+        // const x = new project({
+        //     "projectName": details.projectName,
+        //     "createdAt": new Date,
+        //     "archiveProject": "false",
+        //     "assignTo": details.assignTo
+            let newProject  = new project()
+            newProject.projectName = details.projectName
+            newProject.createdAt = new Date()
+            newProject.assignTo.push({teamId:details.teamId,teamName:details.assignTo[0].teamName})
+      
+        newProject.save(function (err, data) {
             if (err)
             console.log(err, data)
             resolve(data)
@@ -69,7 +74,7 @@ function addAssignTo(name) {
 function createTask(details) {
     return new Promise(function (resolve, reject) {
         const x = new task({
-            "projectId": 66677696696,
+            "projectId": details.id,
             "taskName": details.task.taskName,
             "createdAt": new Date,
             "archiveTask": "false"
@@ -86,7 +91,7 @@ function createTask(details) {
 function createSubTask(details) {
     return new Promise(function (resolve, reject) {
         const x = new subtask({
-            "taskId": 878687678,
+            "taskId": details.id,
             "subtaskName": details.subtask.subtaskName,
             "createdAt": new Date,
             "archiveTask": false,
@@ -102,17 +107,21 @@ function createSubTask(details) {
 
 }
 function createTeam(details){
-    // console.log(details)
+    console.log(details)
     return new Promise(function (resolve, reject) {
-        const x = new team({
-            "teamName": details.team.teamName,
-            "createdAt": new Date
-        })
-        x.save(function (err, data) {
+
+        let newTeam  = new team()
+        newTeam.teamName = details.teamName
+        newTeam.createdAt = new Date()
+        newTeam.teamMembers.push({memberId: details.memberId})
+        
+
+       
+        newTeam.save(function (err, data) {
             if (err)
                 console.log(err, data)
                 resolve(data)
-        })
+            })  
     })
 }
 function findAllTeam(project_data){
@@ -198,7 +207,7 @@ function deleteTeamMember(data) {
 
 function addTeamMember(data) {
     return new Promise((resolve, reject) => {
-
+        console.log(data,"in dao");
         team.findById(
             {
                 "_id": data.teamId
@@ -207,9 +216,9 @@ function addTeamMember(data) {
                     reject(err)
                 } else {
                     doc.teamMembers.push({
-                        "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
+                        "memberId": doc.memberId
                     })
-
+                    console.log(doc.teamMembers.memberId,"add team members");
                     doc.save()
                     resolve(doc)
                 }
@@ -322,7 +331,7 @@ function findMemberTeamProject(doc) {
         let data = Promise.all(arr)
         data.then(function (result) {
             result = result.reduce(function (acc = [], val) {
-                let a = acc.concat(val)
+              
                 return acc.concat(val)
             })
             resolve(result)
