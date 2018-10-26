@@ -11,24 +11,24 @@ function findProjectResponse(req, res) {
         });
     });
 }
-function findTaskResponse(req, res) {
-    activityDao.findTask({
+// function findTaskResponse(req, res) {
+//     activityDao.findTask({
 
-    }).then(data => {
-        res.status('200').send({
-            data: data
-        })
-    })
-}
-function findSubTaskResponse(req, res) {
-    activityDao.findSubTask({
+//     }).then(data => {
+//         res.status('200').send({
+//             data: data
+//         })
+//     })
+// }
+// function findSubTaskResponse(req, res) {
+//     activityDao.findSubTask({
 
-    }).then(data => {
-        res.status('200').send({
-            data: data
-        })
-    })
-}
+//     }).then(data => {
+//         res.status('200').send({
+//             data: data
+//         })
+//     })
+// }
 
 
 function findTeamMembersResponse(req, res) {
@@ -47,6 +47,7 @@ function addTeamMemberResponse(req, res) {
         teamId: req.params.teamId,
         memberId: req.params.memberId
     };
+
     activityDao.addTeamMember(data).then(data => {
         res.status('200').send({
             data: data
@@ -82,25 +83,27 @@ function findTeamResponse(req, res) {//team
 
 function createProjectResponse(req, res) {
     let projectName = req.body.projectName
-    if(req.body.assignTo){
-        name1 = req.body.assignTo.map(function (e) {
+    // if(req.body.assignTo){
+    //     name1 = req.body.assignTo.map(function (e) {
 
-            id = e.teamId,
-                name = e.teamName
+    //         id = e.teamId,
+    //             name = e.teamName
 
-        });
+    //     });
 
 
         if ((req.body.assignTo).length == 1) {
-            if (projectName && name ) {
+            if (projectName) {
 
-
-                let temp = (req.body.projectName).trim()
-                let temp1 = name.trim()
-                if ((temp1.length !== 0) && (temp.length !== 0)) {
+            
+                let temp = (projectName).trim()
+                
+                // let temp1 = name.trim()
+                if (temp.length !== 0) {
                     let newProjectDetails = {
                         projectName: req.body.projectName,
-                        assignTo: req.body.assignTo
+                        assignTo: req.body.assignTo,
+                        teamId:req.params.teamId
                     }
                     activityDao.createProject(newProjectDetails).then(data => {
 
@@ -109,17 +112,17 @@ function createProjectResponse(req, res) {
                         })
 
                     })
-                }
-                else {
+                // }
+                // else {
 
 
-                    res.status(400).send({
-                        payload: {
-                            msg: "project or team  name should not be null"
-                        }
-                    })
+                //     res.status(400).send({
+                //         payload: {
+                //             msg: "project or team  name should not be null"
+                //         }
+                //     })
 
-                }
+                // }
             } else {
                 res.status(400).send({
                     payload: {
@@ -205,6 +208,7 @@ function createTaskResponse(req, res) {
             let data = {
                 id: req.params.projectId,
                 task: req.body
+
             }
             activityDao.createTask(data).then(data => {
                 res.status('200').send({
@@ -269,15 +273,17 @@ function createSubTaskResponse(req, res) {
 }
 
 function createTeamResponse(req,res){//create teammmm
-    if (req.body.teamName) {
+    if (req.body.teamName.teamName) {
         
-        let temp = (req.body.teamName).trim()
+        let temp = (req.body.teamName.teamName).trim()
         if ((Object.prototype.constructor(req.body)) && (temp.length !== 0)) {
             let data = {
-                team: req.body
+                teamName: req.body.teamName.teamName,
+                memberId: req.params.memberId
+
             }
             activityDao.createTeam(data).then(data => {
-                res.status('200').send({
+                res.status('201').send({
                     data: req.body
                 })
 
