@@ -273,12 +273,12 @@ function createSubTaskResponse(req, res) {
 }
 
 function createTeamResponse(req,res){//create teammmm
-    if (req.body.teamName.teamName) {
+    if (req.body.teamName) {
         
-        let temp = (req.body.teamName.teamName).trim()
+        let temp = (req.body.teamName).trim()
         if ((Object.prototype.constructor(req.body)) && (temp.length !== 0)) {
             let data = {
-                teamName: req.body.teamName.teamName,
+                teamName: req.body.teamName,
                 memberId: req.params.memberId
 
             }
