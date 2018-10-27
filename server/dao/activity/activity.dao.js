@@ -3,9 +3,137 @@ const project = require('../../model/project');
 const task = require('../../model/task');
 const subtask = require('../../model/subtask');
 const team = require('../../model/team');
-
 const async = require('async');
 
+function createProject(details) {
+    return new Promise(function (resolve, reject) {
+        console.log(details.assignTo[0].teamName)
+        // const x = new project({
+        //     "projectName": details.projectName,
+        //     "createdAt": new Date,
+        //     "archiveProject": "false",
+        //     "assignTo": details.assignTo
+            let newProject  = new project()
+            newProject.projectName = details.projectName
+            newProject.createdAt = new Date()
+            newProject.assignTo.push({teamId:details.teamId,teamName:details.assignTo[0].teamName})
+      
+        newProject.save(function (err, data) {
+            if (err)
+            console.log(err, data)
+            resolve(data)
+        })
+    })
+}
+function addTeam(team) {
+    return new Promise(function (resolve, reject) {
+        project.findOne({
+            "_id": team.projectId
+        }).exec(function (err, doc) {
+            if (err) {
+                reject(err)
+            } else {
+                doc.assignTo.push(team.teamDetails)
+                doc.save().then(function () {
+                    resolve(doc)
+                })
+            }
+        });
+    });
+}
+function addAssignTo(name) {
+    return new Promise(function (resolve, reject) {
+        name.assignTo.map(function (e) {
+            project.findOne({
+                "_id": name.id,
+                "assignTo.teamName": e.teamName,
+                "assignTo.teamId": e.teamId
+            }).exec(function (err, doc) {
+                if (err) {
+                    throw err
+                } else {
+                    if (doc === null) {
+                        addTeam({
+                            projectId: name.id,
+                            teamDetails: e
+                        }).then(function (doc) {
+                            resolve(doc)
+                        }).catch(function (err) {
+                            resolve(err)
+                        })
+                    } else {
+                        reject(doc)
+                    }
+                }
+            })
+
+        })
+    })
+}
+
+function createTask(details) {
+    return new Promise(function (resolve, reject) {
+        const x = new task({
+            "projectId": details.id,
+            "taskName": details.task.taskName,
+            "createdAt": new Date,
+            "archiveTask": "false"
+
+        })
+        x.save(function (err, data) {
+            if (err)
+            console.log(err, data)
+            resolve(data)
+        })
+
+    })
+}
+function createSubTask(details) {
+    return new Promise(function (resolve, reject) {
+        const x = new subtask({
+            "taskId": details.id,
+            "subtaskName": details.subtask.subtaskName,
+            "createdAt": new Date,
+            "archiveTask": false,
+            "assignTo": ["t1", "t2"]
+
+        })
+        x.save(function (err, data) {
+            if (err)
+            console.log(err, data)
+            resolve(data)
+        })
+    })
+
+}
+function createTeam(details){
+    console.log(details)
+    return new Promise(function (resolve, reject) {
+
+        let newTeam  = new team()
+        newTeam.teamName = details.teamName
+        newTeam.createdAt = new Date()
+        newTeam.teamMembers.push({memberId: details.memberId})
+        
+
+       
+        newTeam.save(function (err, data) {
+            if (err)
+                console.log(err, data)
+                resolve(data)
+            })  
+    })
+}
+function findAllTeam(project_data){
+    return new Promise(function (resolve, reject) {
+        let a = parseInt(project_data.l);
+        let b = parseInt(project_data.p);
+        let c = a * b;
+        team.find().limit(a).skip(c).exec(function (err, data) {
+            resolve(data);
+        })
+    })
+}
 function findSpecificProject(data) {
     return new Promise(function (resolve, reject) {
         console.log(data)
@@ -101,14 +229,11 @@ function addTeamMember(data){
                 }else {
                     console.log(doc)
                     doc.teamMembers.push({
-                    //    "memberId": "deddd8d2-e041-4fbb-a8ed-3c079af9930d"
-                    // "memberId": "2fdbb753-9951-4011-89e1-e33f26f2ed84"
-                    "memberId":doc.memberId
-                   })
-   
-                   doc.save()
-                   resolve(doc)
-                }               
+                        "memberId": doc.memberId
+                    })
+                    doc.save()
+                    resolve(doc)
+                }
             }
         )
     })
@@ -285,6 +410,8 @@ module.exports = {
     findProject,
     createProject,
     createTask,
+    createSubTask,
+    createTeam,
     updateProject,
     archiveTask,
     findTask,
@@ -296,5 +423,7 @@ module.exports = {
     addTeamMember,
     deleteTeamMember,
     findMemberTeamProject,
-    findTeamProjects
+    findAllTeam,
+    findTeamProjects,
+    addAssignTo
 }
