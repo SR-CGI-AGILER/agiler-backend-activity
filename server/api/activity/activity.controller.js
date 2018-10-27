@@ -108,7 +108,7 @@ function createProjectResponse(req, res) {
                     activityDao.createProject(newProjectDetails).then(data => {
 
                         res.status('201').send({
-                            data: req.body
+                            data: data
                         })
 
                     })
@@ -168,7 +168,7 @@ function addAssignToResponse(req, res) {
                 activityDao.addAssignTo(newProjectDetails).then(data => {
 
                     res.status('201').send({
-                        data: req.body
+                        data: data
                     })
 
                 }).catch(function (err) {
@@ -212,7 +212,7 @@ function createTaskResponse(req, res) {
             }
             activityDao.createTask(data).then(data => {
                 res.status('200').send({
-                    data: req.body
+                    data: data
                 })
 
             })
@@ -247,7 +247,7 @@ function createSubTaskResponse(req, res) {
             activityDao.createSubTask(data).then(data => {
 
                 res.status('200').send({
-                    data: req.body
+                    data: data
                 })
 
             })
@@ -284,7 +284,7 @@ function createTeamResponse(req,res){//create teammmm
             }
             activityDao.createTeam(data).then(data => {
                 res.status('201').send({
-                    data: req.body
+                    data: data
                 })
 
             })
