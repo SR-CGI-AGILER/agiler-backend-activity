@@ -475,6 +475,19 @@ function markTaskCompleteResponse(req, res) {
     })
 }
 
+
+function assignDueDateResponse(req, res) {
+    data = {
+        projectId: req.params.projectId,
+        dueDate: req.body.dueDate
+    };
+    activityDao.assignDueDate(data).then(data => {
+        res.status('200').send({
+            data: data
+        })
+    })
+}
+
 module.exports = {
     findSpecificProjectResponse,
     findProjectResponse,
@@ -499,5 +512,6 @@ module.exports = {
     deleteProjectResponse,
     deleteTaskResponse,
     deleteTeamResponse,
-    markTaskCompleteResponse
+    markTaskCompleteResponse,
+    assignDueDateResponse
 }

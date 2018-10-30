@@ -407,7 +407,7 @@ function findMemberTeamProject(doc) {
                 reject(err)
             }
             result = result.reduce(function (acc = [], val) {
-
+                
               
                 return acc.concat(val)
             })
@@ -495,6 +495,24 @@ function markTaskComplete(task_data) {
     })
 }
 
+function assignDueDate(project_data) {
+    return new Promise(function (resolve, reject) {
+        project.findOneAndUpdate({
+            "_id":project_data.projectId
+        }, {
+            $set: {
+                "dueDate":project_data.dueDate
+            }
+        },
+        function (err, data) {
+            if(err)
+            reject(err)
+            else
+            resolve(data)
+        })
+    })
+}
+
 module.exports = {
     findSpecificProject,
     findProject,
@@ -519,5 +537,6 @@ module.exports = {
     deleteTeam,
     findAllTeam,
     addAssignTo,
-    markTaskComplete
+    markTaskComplete,
+    assignDueDate
 }

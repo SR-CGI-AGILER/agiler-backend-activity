@@ -2,7 +2,7 @@ const router = require('express').Router();
 const activityController = require('./activity.controller')
 router.get('/project', activityController.findProjectResponse)
 
-router.post('/project/:teamId', activityController.createProjectResponse) 
+router.post('/project/:teamId', activityController.createProjectlResponse) 
 router.post('/team/:memberId',activityController.createTeamResponse)//add team
 router.get('/team/:limit?/:page?',activityController.findAllTeamResponse)//get all teams
 router.post('/project/:projectId/assignTo',activityController.addAssignToResponse)
@@ -26,5 +26,6 @@ router.delete('/project/:projectId', activityController.deleteProjectResponse);
 router.delete('/tasks/:taskId', activityController.deleteTaskResponse);
 router.delete('/teams/:teamId', activityController.deleteTeamResponse);
 router.patch('/tasks/:taskId', activityController.markTaskCompleteResponse);
+router.patch('/project/:projectId', activityController.assignDueDateResponse);
 
 module.exports = router
