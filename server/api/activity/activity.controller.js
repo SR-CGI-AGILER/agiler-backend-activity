@@ -109,6 +109,7 @@ function createProjectResponse(req, res) {
 
                         res.status('201').send({
                             data: data
+                            
                         })
 
                     })
