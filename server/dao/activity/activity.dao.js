@@ -407,7 +407,7 @@ function findMemberTeamProject(doc) {
                 reject(err)
             }
             result = result.reduce(function (acc = [], val) {
-                
+
               
                 return acc.concat(val)
             })
@@ -474,11 +474,6 @@ function deleteTeam(team_data) {
     })
 }
 
-function findMemberTeams(data) {
-    return new Promise(function (resolve, reject ){
-        team
-    })
-}
 
 function markTaskComplete(task_data) {
     return new Promise(function (resolve, reject) {

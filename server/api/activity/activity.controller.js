@@ -81,16 +81,16 @@ function findTeamResponse(req, res) {//team
     });
 }
 
-// function findMemberTeamsResponse(req, res) {
-//     let data = {
-//         memberId: req.params.memberId
-//     };
-//     activityDao.findMemberTeams(data).then(data => {
-//         res.status('200').send({
-//             data: data
-//         });
-//     });
-// }
+function findMemberTeamsResponse(req, res) {
+    let data = {
+        memberId: req.params.memberId
+    };
+    activityDao.findMemberTeams(data).then(data => {
+        res.status('200').send({
+            data: data
+        });
+    });
+}
 
 function createProjectResponse(req, res) {
     let projectName = req.body.projectName
@@ -493,7 +493,7 @@ module.exports = {
     findProjectResponse,
     findTaskResponse,
     findSubTaskResponse,
-    // findMemberTeamsResponse,
+    findMemberTeamsResponse,
     createProjectResponse,
     createTaskResponse,
     createSubTaskResponse,
