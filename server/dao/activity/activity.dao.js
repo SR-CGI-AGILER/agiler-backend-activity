@@ -3,10 +3,10 @@ const project = require('../../model/project');
 const task = require('../../model/task');
 const subtask = require('../../model/subtask');
 const team = require('../../model/team');
-
 const async = require('async');
 
 function createProject(details) {
+    console.log('is this this getting called ??')
     return new Promise(function (resolve, reject) {
         // console.log(details.assignTo[0].teamName)
         // const x = new project({
@@ -14,13 +14,14 @@ function createProject(details) {
         //     "createdAt": new Date,
         //     "archiveProject": "false",
         //     "assignTo": details.assignTo
+        console.log(details, "this is the details in DAo while createing the project")
             let newProject  = new project()
             newProject.projectName = details.projectName
             newProject.createdAt = new Date()
+            
             newProject.assignTo.push({teamId:details.teamId,teamName:details.assignTo[0].teamName})
       
         newProject.save(function (err, data) {
-            if (err)
             console.log(err, data)
             resolve(data)
         })
@@ -269,6 +270,9 @@ function findSubTask(subtask_data) {
             "taskId": subtask_data.id
         }).limit(a).skip(c).exec(function (err, data) {
             // console.log("in sub-task model");
+            if(err) {
+                reject(err)
+            }
             resolve(data);
         });
     });
@@ -332,7 +336,9 @@ function findMemberTeams(teamId) {
         project.find({
                 "assignTo.teamId": teamId
             }, {
-                "projectName": 1
+                "projectName": 1,
+                "createdAt" : 1,
+                "dueDate":1,
             })
             .exec(function (err, doc) {
                 if (err) {
@@ -346,6 +352,7 @@ function findMemberTeams(teamId) {
 }
 
 function findMemberTeamProject(doc) {
+    console.log("this should not come here while getting the task of the specific project ")
     return new Promise(function (resolve, reject) {
         let arr = []
         doc.map(function (e) {
@@ -354,16 +361,20 @@ function findMemberTeamProject(doc) {
         let data = Promise.all(arr)
         // console.log(data)
 
-        data.then(function (err, result) {
-            if(err){
-                reject(err)
-            }
-            result = result.reduce(function (acc = [], val) {
+        data.then(function (result) {
+            // if(err){
+            //     console.log(err, "are we here ?????")
+            //     reject(err)
+            // }else {
 
-              
-                return acc.concat(val)
-            })
-            resolve(result)
+                console.log("where am i?",)
+                result = result.reduce(function (acc = [], val) {
+    
+                  console.log(acc, "acc")
+                    return acc.concat(val)
+                })
+                resolve(result)
+            // }
         })
     })
 }
@@ -373,7 +384,9 @@ function findTeamProjects(team_data) {
         project.find({
             "assignTo.teamId": team_data.teamId
         }, {
-            "projectName": 1
+            "projectName": 1,
+            "createdAt":1,
+            "dueDate":1
         }).exec(function (err, data) {
             resolve(data)
         })

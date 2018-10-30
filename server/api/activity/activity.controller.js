@@ -47,7 +47,6 @@ function addTeamMemberResponse(req, res) {
         teamId: req.params.teamId,
         memberId: req.params.memberId
     };
-
     activityDao.addTeamMember(data).then(data => {
         res.status('200').send({
             data: data
@@ -92,7 +91,7 @@ function createProjectResponse(req, res) {
     //     });
 
 
-        if ((req.body.assignTo).length == 1) {
+        if ((req.body.assignTo).length >= 1) {
             if (projectName) {
 
             
@@ -105,10 +104,12 @@ function createProjectResponse(req, res) {
                         assignTo: req.body.assignTo,
                         teamId:req.params.teamId
                     }
+                    console.log(newProjectDetails, "is the data scructure correct ??")
                     activityDao.createProject(newProjectDetails).then(data => {
 
                         res.status('201').send({
                             data: data
+                            
                         })
 
                     })
@@ -331,6 +332,7 @@ function findSpecificProjectResponse(req, res) {
 }
 
 function findTaskResponse(req, res) {
+    console.log("is this thing comes here ???")
     let data = 
         {
             id:req.params.projectId,
@@ -341,6 +343,12 @@ function findTaskResponse(req, res) {
         res.status('200').send({
             data: data
         });
+    }).catch(err => {
+        res.send({
+            length: 0,
+            error: "some thing went Wrong",
+            payload: []
+        })
     });
 }
 
@@ -392,8 +400,14 @@ function findMemberTeamProjectsResponse(req, res) {
                 length: data.length,
                 payload: data
             })
-        })
+        }).catch (function (err) {
+            res.send({
+                length: 0,
+                error: "some error occured",
+                payload: []
+            })
     })
+})
 }
 
 function findTeamProjectsResponse(req, res) {
