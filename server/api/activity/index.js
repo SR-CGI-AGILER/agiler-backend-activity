@@ -8,8 +8,8 @@ router.get('/team/:limit?/:page?',activityController.findAllTeamResponse)//get a
 router.post('/project/:projectId/assignTo',activityController.addAssignToResponse)
 router.post('/project/:projectId/task', activityController.createTaskResponse) 
 router.post('/task/:taskId/subtask', activityController.createSubTaskResponse) 
-router.get('/projects/:projectId/tasks', activityController.findTaskResponse) 
-router.get('/task/:taskId/subtask', activityController.findSubTaskResponse) 
+// router.get('/projects/:projectId/tasks', activityController.findTaskResponse) 
+// router.get('/task/:taskId/subtask', activityController.findSubTaskResponse) 
 router.get('/project/:limit?/:page?', activityController.findProjectResponse)
 router.get('/projectx/:projectId', activityController.findSpecificProjectResponse)
 router.get('/projects/:projectId/tasks/:limit?/:page?', activityController.findTaskResponse)
@@ -22,6 +22,9 @@ router.get('/teams/:teamId/projects', activityController.findTeamProjectsRespons
 router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
 router.patch('/teams/:teamId/:memberId', activityController.addTeamMemberResponse);
 router.delete('/teams/:teamId/:memberId', activityController.deleteTeamMemberResponse);
+router.delete('/project/:projectId', activityController.deleteProjectResponse);
+router.delete('/tasks/:taskId', activityController.deleteTaskResponse);
+router.delete('/teams/:teamId', activityController.deleteTeamResponse);
 
 
 module.exports = router
