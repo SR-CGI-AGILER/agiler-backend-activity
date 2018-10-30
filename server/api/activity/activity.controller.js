@@ -70,22 +70,11 @@ function deleteTeamMemberResponse(req, res) {
 function findTeamResponse(req, res) {//team
    
     let data = {
-        l: req.query.limit || 10,
-        p: req.query.page || 0,
+        l: req.query.limit,
+        p: req.query.page,
         member: req.params.memberId
     };
     activityDao.findTeam(data).then(data => {
-        res.status('200').send({
-            data: data
-        });
-    });
-}
-
-function findMemberTeamsResponse(req, res) {
-    let data = {
-        memberId: req.params.memberId
-    };
-    activityDao.findMemberTeams(data).then(data => {
         res.status('200').send({
             data: data
         });
@@ -368,19 +357,6 @@ function findSubTaskResponse(req, res) {
     });
 }
 
-
-
-function updateProjectResponse(req, res) {
-    activityDao.updateProject({
-        projectName: req.params.projectName
-    }).then(data => {
-        res.status('200').send({
-            data: data
-        })
-
-    })
-}
-
 function archiveTaskResponse(req, res) {
    let data = {
        p_id:req.params.projectId,
@@ -464,24 +440,23 @@ function deleteTeamResponse(req, res) {
     })
 }
 
-function markTaskCompleteResponse(req, res) {
-    data = {
-        taskId: req.params.taskId
+function assignDueDateResponse(req, res) {
+    let data = {
+        taskId:req.params.taskId,
+        dueDate:req.body.dueDate
     };
-    activityDao.markTaskComplete(data).then(data => {
+    activityDao.assignDueDate(data).then(data => {
         res.status('200').send({
-            data: data
+            data : data
         })
     })
 }
 
-
-function assignDueDateResponse(req, res) {
-    data = {
-        projectId: req.params.projectId,
-        dueDate: req.body.dueDate
+function markTaskCompleteResponse(req, res) {
+    let data = {
+        taskId:req.params.taskId
     };
-    activityDao.assignDueDate(data).then(data => {
+    activityDao.markTaskComplete(data).then(data => {
         res.status('200').send({
             data: data
         })
@@ -493,12 +468,10 @@ module.exports = {
     findProjectResponse,
     findTaskResponse,
     findSubTaskResponse,
-    findMemberTeamsResponse,
     createProjectResponse,
     createTaskResponse,
     createSubTaskResponse,
     addAssignToResponse,
-    updateProjectResponse,
     archiveTaskResponse,
     archiveProjectResponse,
     findMemberTeamProjectsResponse,
@@ -512,6 +485,6 @@ module.exports = {
     deleteProjectResponse,
     deleteTaskResponse,
     deleteTeamResponse,
-    markTaskCompleteResponse,
-    assignDueDateResponse
+    assignDueDateResponse,
+    markTaskCompleteResponse
 }

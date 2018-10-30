@@ -242,39 +242,7 @@ function addTeamMember(data) {
     }
 
 
-function createProject(details) {
-    return new Promise(function (resolve, reject) {
-        const x = new project({
-            "projectId": details.projectId,
-            "projectName": details.projectName,
-            "createdAt": new Date(),
-            "archiveProject": false
-        })
-        x.save(function (err, data) {
-            if (err)
-                console.log(err, data)
-            resolve(data)
-            // console.log(data)
-        });
-    });
-}
 
-function createTask(details) {
-    return new Promise(function (resolve, reject) {
-        // console.log(details)
-        const x = new task({
-            "taskName": details.taskName,
-            "createdAt": new Date(),
-            "archiveTask": false,
-            "projectId": details.id
-        })
-        x.save(function (err, data) {
-            if (err)
-                console.log(err, data)
-            resolve(data)
-        });
-    });
-}
 
 function findTask(details) {
     return new Promise(function (resolve, reject) {
@@ -306,22 +274,6 @@ function findSubTask(subtask_data) {
     });
 }
 
-function updateProject(id) {
-    return new Promise(function (resolve, reject) {
-
-        project.findOneAndUpdate({
-            "projectName": id.projectName
-        }, {
-            $set: {
-                "projectId": id.projectId
-            }
-        }, function (err, data) {
-            // console.log(data)
-            resolve(data)
-        })
-
-    })
-}
 
 function archiveProject(project_data) {
     return new Promise(function (resolve, reject) {
@@ -440,13 +392,6 @@ function deleteProject(project_data) {
         })
     })
 }
-function findTeamProjects(team_data){
-    return new Promise(function (resolve, reject) {
-        project.find({"assignTo.teamId": team_data.teamId}, {"projectName":1}).exec(function(err, data){
-            resolve(data)
-        })
-    })
- }
 
 function deleteTask(task_data) {
     return new Promise(function (resolve, reject) {
@@ -474,39 +419,35 @@ function deleteTeam(team_data) {
     })
 }
 
-
-function markTaskComplete(task_data) {
+function assignDueDate(task_data){
     return new Promise(function (resolve, reject) {
         task.findOneAndUpdate({
-                        "_id": task_data.taskId
-                    }, {
-                        $set: {
-                            "status": "complete"
-                        }
-                    }, function (err, data) {
-                        console.log(data)
-                        resolve(data)
-                    })
-    })
-}
-
-function assignDueDate(project_data) {
-    return new Promise(function (resolve, reject) {
-        project.findOneAndUpdate({
-            "_id":project_data.projectId
-        }, {
-            $set: {
-                "dueDate":project_data.dueDate
-            }
-        },
-        function (err, data) {
-            if(err)
-            reject(err)
-            else
-            resolve(data)
+            "_id":task_data.taskId
+        }, 
+            {
+                $set: {
+                    "dueDate": task_data.dueDate
+                }
+            }, function (err, data) {
+                // console.log(data)
+                resolve(data)
+            })
         })
-    })
-}
+    }
+
+   function markTaskComplete(task_data) {
+       return new Promise( function (resolve, reject) {
+           task.findOneAndUpdate({
+               "_id":task_data.taskId
+           }, {
+               $set: {
+                   "status":"complete"
+               }
+           }, function(err, data) {
+               resolve(data)
+           })
+       })
+   } 
 
 module.exports = {
     findSpecificProject,
@@ -515,7 +456,6 @@ module.exports = {
     createSubTask,
     createTask,
     createTeam,
-    updateProject,
     archiveTask,
     findTask,
     findSubTask,
@@ -532,6 +472,6 @@ module.exports = {
     deleteTeam,
     findAllTeam,
     addAssignTo,
-    markTaskComplete,
-    assignDueDate
+    assignDueDate,
+    markTaskComplete
 }
