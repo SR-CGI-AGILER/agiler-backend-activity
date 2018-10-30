@@ -11,24 +11,24 @@ function findProjectResponse(req, res) {
         });
     });
 }
-function findTaskResponse(req, res) {
-    activityDao.findTask({
+// function findTaskResponse(req, res) {
+//     activityDao.findTask({
 
-    }).then(data => {
-        res.status('200').send({
-            data: data
-        })
-    })
-}
-function findSubTaskResponse(req, res) {
-    activityDao.findSubTask({
+//     }).then(data => {
+//         res.status('200').send({
+//             data: data
+//         })
+//     })
+// }
+// function findSubTaskResponse(req, res) {
+//     activityDao.findSubTask({
 
-    }).then(data => {
-        res.status('200').send({
-            data: data
-        })
-    })
-}
+//     }).then(data => {
+//         res.status('200').send({
+//             data: data
+//         })
+//     })
+// }
 
 
 function findTeamMembersResponse(req, res) {
@@ -91,21 +91,24 @@ function createProjectResponse(req, res) {
         });
 
 
-        if ((req.body.assignTo).length == 1) {
-            if (projectName && name ) {
+        if ((req.body.assignTo).length >= 1) {
+            if (projectName) {
 
-
-                let temp = (req.body.projectName).trim()
-                let temp1 = name.trim()
-                if ((temp1.length !== 0) && (temp.length !== 0)) {
+            
+                let temp = (projectName).trim()
+                
+                // let temp1 = name.trim()
+                if (temp.length !== 0) {
                     let newProjectDetails = {
                         projectName: req.body.projectName,
                         assignTo: req.body.assignTo
                     }
+                    console.log(newProjectDetails, "is the data scructure correct ??")
                     activityDao.createProject(newProjectDetails).then(data => {
 
                         res.status('201').send({
-                            data: req.body
+                            data: data
+                            
                         })
 
                     })
@@ -325,6 +328,7 @@ function findSpecificProjectResponse(req, res) {
 }
 
 function findTaskResponse(req, res) {
+    console.log("is this thing comes here ???")
     let data = 
         {
             id:req.params.projectId,
@@ -335,6 +339,12 @@ function findTaskResponse(req, res) {
         res.status('200').send({
             data: data
         });
+    }).catch(err => {
+        res.send({
+            length: 0,
+            error: "some thing went Wrong",
+            payload: []
+        })
     });
 }
 
@@ -399,8 +409,14 @@ function findMemberTeamProjectsResponse(req, res) {
                 length: data.length,
                 payload: data
             })
-        })
+        }).catch (function (err) {
+            res.send({
+                length: 0,
+                error: "some error occured",
+                payload: []
+            })
     })
+})
 }
 
 function findTeamProjectsResponse(req, res) {
@@ -433,5 +449,8 @@ module.exports = {
     addTeamMemberResponse,
     deleteTeamMemberResponse,
     createTeamResponse,
-    findAllTeamResponse
+    findAllTeamResponse,
+    deleteProjectResponse,
+    deleteTaskResponse,
+    deleteTeamResponse
 }

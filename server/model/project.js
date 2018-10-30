@@ -12,7 +12,6 @@ var projectSchema = new Schema({
     duringStandUp : Boolean
 });
 
-;
 
 var project = mongoose.model('project', projectSchema);
 
