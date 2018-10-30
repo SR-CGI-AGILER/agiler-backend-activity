@@ -241,6 +241,7 @@ function addTeamMember(data) {
         })
     }
 
+
 function createProject(details) {
     return new Promise(function (resolve, reject) {
         const x = new project({
@@ -473,6 +474,27 @@ function deleteTeam(team_data) {
     })
 }
 
+function findMemberTeams(data) {
+    return new Promise(function (resolve, reject ){
+        team
+    })
+}
+
+function markTaskComplete(task_data) {
+    return new Promise(function (resolve, reject) {
+        task.findOneAndUpdate({
+                        "_id": task_data.taskId
+                    }, {
+                        $set: {
+                            "status": "complete"
+                        }
+                    }, function (err, data) {
+                        console.log(data)
+                        resolve(data)
+                    })
+    })
+}
+
 module.exports = {
     findSpecificProject,
     findProject,
@@ -496,5 +518,6 @@ module.exports = {
     deleteTask,
     deleteTeam,
     findAllTeam,
-    addAssignTo
+    addAssignTo,
+    markTaskComplete
 }

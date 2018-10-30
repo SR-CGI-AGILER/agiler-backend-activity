@@ -70,8 +70,8 @@ function deleteTeamMemberResponse(req, res) {
 function findTeamResponse(req, res) {//team
    
     let data = {
-        l: req.query.limit,
-        p: req.query.page,
+        l: req.query.limit || 10,
+        p: req.query.page || 0,
         member: req.params.memberId
     };
     activityDao.findTeam(data).then(data => {
@@ -80,6 +80,17 @@ function findTeamResponse(req, res) {//team
         });
     });
 }
+
+// function findMemberTeamsResponse(req, res) {
+//     let data = {
+//         memberId: req.params.memberId
+//     };
+//     activityDao.findMemberTeams(data).then(data => {
+//         res.status('200').send({
+//             data: data
+//         });
+//     });
+// }
 
 function createProjectResponse(req, res) {
     let projectName = req.body.projectName
@@ -453,11 +464,23 @@ function deleteTeamResponse(req, res) {
     })
 }
 
+function markTaskCompleteResponse(req, res) {
+    data = {
+        taskId: req.params.taskId
+    };
+    activityDao.markTaskComplete(data).then(data => {
+        res.status('200').send({
+            data: data
+        })
+    })
+}
+
 module.exports = {
     findSpecificProjectResponse,
     findProjectResponse,
     findTaskResponse,
     findSubTaskResponse,
+    // findMemberTeamsResponse,
     createProjectResponse,
     createTaskResponse,
     createSubTaskResponse,
@@ -475,5 +498,6 @@ module.exports = {
     findAllTeamResponse,
     deleteProjectResponse,
     deleteTaskResponse,
-    deleteTeamResponse
+    deleteTeamResponse,
+    markTaskCompleteResponse
 }

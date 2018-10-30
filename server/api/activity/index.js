@@ -19,12 +19,12 @@ router.put('/project/:projectId', activityController.archiveProjectResponse)
 router.put('/project/:projectId/tasks/:taskId', activityController.archiveTaskResponse)
 router.get('/teams/:memberId',activityController.findTeamResponse);
 router.get('/teams/:teamId/projects', activityController.findTeamProjectsResponse);
-router.get('/teams/:teamId/members',activityController.findTeamMembersResponse);
+// router.get('/teams/:memberId', activityController.findMemberTeamsResponse);
 router.patch('/teams/:teamId/:memberId', activityController.addTeamMemberResponse);
 router.delete('/teams/:teamId/:memberId', activityController.deleteTeamMemberResponse);
 router.delete('/project/:projectId', activityController.deleteProjectResponse);
 router.delete('/tasks/:taskId', activityController.deleteTaskResponse);
 router.delete('/teams/:teamId', activityController.deleteTeamResponse);
-
+router.patch('/tasks/:taskId', activityController.markTaskCompleteResponse);
 
 module.exports = router
