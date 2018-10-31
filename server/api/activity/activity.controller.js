@@ -459,6 +459,7 @@ function assignDueDateResponse(req, res) {
         taskId:req.params.taskId,
         dueDate:req.body.dueDate
     };
+    console.log(data, "this is controller for due date")
     activityDao.assignDueDate(data).then(data => {
         res.status('200').send({
             data : data

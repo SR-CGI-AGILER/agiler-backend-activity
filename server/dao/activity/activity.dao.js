@@ -433,6 +433,7 @@ function deleteTeam(team_data) {
 }
 
 function assignDueDate(task_data){
+    console.log(task_data, "this is task data......in DAO")
     return new Promise(function (resolve, reject) {
         task.findOneAndUpdate({
             "_id":task_data.taskId
@@ -442,7 +443,7 @@ function assignDueDate(task_data){
                     "dueDate": task_data.dueDate
                 }
             }, function (err, data) {
-                // console.log(data)
+                console.log(data, "this is data form the updated data from DB")
                 resolve(data)
             })
         })
