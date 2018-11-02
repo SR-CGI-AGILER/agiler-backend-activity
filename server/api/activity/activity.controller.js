@@ -318,6 +318,12 @@ function findAllTeamResponse(req, res){
         res.status('200').send({
             data: data
         });
+    }).catch(err => {
+        res.send({
+            length: 0,
+            error: "some thing went Wrong",
+            payload: []
+        })
     });
 }
 function findSpecificProjectResponse(req, res) {

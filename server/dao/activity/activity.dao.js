@@ -132,7 +132,10 @@ function findAllTeam(project_data){
         let b = parseInt(project_data.p);
         let c = a * b;
         team.find().limit(a).skip(c).exec(function (err, data) {
-            resolve(data);
+            if(err){reject(err);}else{
+                resolve(data);
+            }
+           
         })
     })
 }
@@ -231,8 +234,9 @@ function addTeamMember(data) {
                 if (err) {
                     reject(err)
                 } else {
+                    console.log(doc,"doc is here bro")
                     doc.teamMembers.push({
-                        "memberId": doc.memberId
+                        "memberId": data.memberId
                     })
                     // console.log(doc.teamMembers.memberId,"add team members");
                     doc.save()
