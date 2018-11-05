@@ -238,7 +238,7 @@ function addTeamMember(data) {
                     reject(err)
                 } else {
                     doc.teamMembers.push({
-                        "memberId": doc.memberId
+                        "memberId": data.memberId
                     })
                     // console.log(doc.teamMembers.memberId,"add team members");
                     doc.save()
@@ -472,22 +472,45 @@ function assignDueDate(task_data){
    } 
 
 
-   function assignTask(task_data) {
-       return new Promise( function( resolve, reject) {
-           task.findOneAndUpdate({
-               "_id":task_data.taskId
-           }, {
-               $set: {
-                   "assignTo":task_data.memberId
-               }
-           }, function (err, data) {
-               if(err)
-               reject(err)
-               else
-               resolve(data)
-           })
-    })
-}
+//    function assignTask(task_data) {
+//        return new Promise( function( resolve, reject) {
+//            task.findOne({
+//                "_id":task_data.taskId
+//            }, function (err, data) {
+//                if(err)
+//                reject(err)
+//                else{
+//                    data.assignTo = {
+//                        memberId: task_data.memberId
+//                    }
+//                    data.save()
+//              console.log(data, "this task is in dao ...")
+//                resolve(data)
+//             }
+//            })
+//     })
+// }
+
+function assignTask(task_data) {
+    return new Promise((resolve, reject) => {
+        // console.log(data,"in dao");
+        task.findById(
+            {
+                "_id": task_data.taskId
+            }, function (err, doc) {
+                if (err) {
+                    reject(err)
+                } else {
+                    doc.assignTo.push({
+                        "memberId": task_data.memberId
+                    })
+                    // console.log(doc.teamMembers.memberId,"add team members");
+                    doc.save()
+                    resolve(doc)
+                }
+            })
+        })
+    }
 
 module.exports = {
     findSpecificProject,

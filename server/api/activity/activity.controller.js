@@ -528,10 +528,11 @@ function markTaskCompleteResponse(req, res) {
 function assignTaskResponse(req, res) {
     let data = {
         taskId:req.params.taskId,
-        memberId:req.body
+        memberId:req.params.memberId
     };
 
     activityDao.assignTask(data).then(data => {
+        console.log(data, "this data is in controller..!!!")
         res.status('200').send({
             data:data
         })
