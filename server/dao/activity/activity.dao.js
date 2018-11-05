@@ -27,6 +27,8 @@ function createProject(details) {
         })
     })
 }
+
+
 function addTeam(team) {
     return new Promise(function (resolve, reject) {
         project.findOne({
@@ -45,11 +47,11 @@ function addTeam(team) {
 }
 function addAssignTo(name) {
     return new Promise(function (resolve, reject) {
-        name.assignTo.map(function (e) {
+        console.log(name,"name hai from ctr")
             project.findOne({
                 "_id": name.id,
-                "assignTo.teamName": e.teamName,
-                "assignTo.teamId": e.teamId
+                "assignTo.teamName": name.assignTo.teamName,
+                "assignTo.teamId": name.assignTo.teamId
             }).exec(function (err, doc) {
                 if (err) {
                     throw err
@@ -57,7 +59,7 @@ function addAssignTo(name) {
                     if (doc === null) {
                         addTeam({
                             projectId: name.id,
-                            teamDetails: e
+                            teamDetails: name.assignTo
                         }).then(function (doc) {
                             resolve(doc)
                         }).catch(function (err) {
@@ -69,9 +71,10 @@ function addAssignTo(name) {
                 }
             })
 
-        })
+        
     })
 }
+
 
 function createTask(details) {
     return new Promise(function (resolve, reject) {
@@ -132,6 +135,9 @@ function findAllTeam(project_data){
         let b = parseInt(project_data.p);
         let c = a * b;
         team.find().limit(a).skip(c).exec(function (err, data) {
+            if(err)
+            reject(err)
+            else
             resolve(data);
         })
     })
@@ -457,10 +463,31 @@ function assignDueDate(task_data){
                    "status":"complete"
                }
            }, function(err, data) {
+               if(err)
+               reject(err)
+               else
                resolve(data)
            })
        })
    } 
+
+
+   function assignTask(task_data) {
+       return new Promise( function( resolve, reject) {
+           task.findOneAndUpdate({
+               "_id":task_data.taskId
+           }, {
+               $set: {
+                   "assignTo":task_data.memberId
+               }
+           }, function (err, data) {
+               if(err)
+               reject(err)
+               else
+               resolve(data)
+           })
+    })
+}
 
 module.exports = {
     findSpecificProject,
@@ -486,5 +513,6 @@ module.exports = {
     findAllTeam,
     addAssignTo,
     assignDueDate,
-    markTaskComplete
+    markTaskComplete,
+    assignTask
 }
