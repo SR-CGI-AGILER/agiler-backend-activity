@@ -483,6 +483,16 @@ function markTaskCompleteResponse(req, res) {
         })
     })
 }
+function assignNullTaskResponse(req,res) {
+    let data = {
+        taskId:req.params.taskId
+    };
+    activityDao.assignNullTask(data).then(data => {
+        res.status('200').send({
+            data: data
+        })
+    })
+}
 
 module.exports = {
     findSpecificProjectResponse,
@@ -507,5 +517,6 @@ module.exports = {
     deleteTaskResponse,
     deleteTeamResponse,
     assignDueDateResponse,
-    markTaskCompleteResponse
+    markTaskCompleteResponse,
+    assignNullTaskResponse
 }

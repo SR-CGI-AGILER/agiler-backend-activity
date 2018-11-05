@@ -25,6 +25,7 @@ router.delete('/tasks/:taskId', activityController.deleteTaskResponse);
 router.delete('/teams/:teamId', activityController.deleteTeamResponse);
 router.patch('/task/:taskId', activityController.assignDueDateResponse);
 router.patch('/tasks/:taskId', activityController.markTaskCompleteResponse);
+router.patch('/taskz/:taskId',activityController.assignNullTaskResponse)
 
 
 module.exports = router

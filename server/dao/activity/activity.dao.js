@@ -462,10 +462,29 @@ function assignDueDate(task_data){
                    "status":"complete"
                }
            }, function(err, data) {
+               if(err)
+               reject(err)
+               else
                resolve(data)
            })
        })
    } 
+   function assignNullTask(task_data) {
+       return new Promise(function(resolve,reject){
+        task.findOneAndUpdate({
+            "_id":task_data.taskId
+        }, {
+            $set: {
+                "assignTo":"null"
+            }
+        }, function(err, data) {
+            if(err)
+            reject(err)
+            else
+            resolve(data)
+        })
+       })
+   }
 
 module.exports = {
     findSpecificProject,
@@ -491,5 +510,6 @@ module.exports = {
     findAllTeam,
     addAssignTo,
     assignDueDate,
-    markTaskComplete
+    markTaskComplete,
+    assignNullTask
 }
