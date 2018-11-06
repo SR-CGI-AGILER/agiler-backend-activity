@@ -110,7 +110,7 @@ function createProjectResponse(req, res) {
                         assignTo: req.body.assignTo,
                         teamId:req.params.teamId
                     }
-                    console.log(newProjectDetails, "is the data scructure correct ??")
+                    
                     activityDao.createProject(newProjectDetails).then(data => {
 
                         res.status('201').send({
@@ -152,29 +152,27 @@ function createProjectResponse(req, res) {
         })
     }
 }
-
 function addAssignToResponse(req, res) {
-    name1 = req.body.assignTo.map(function (e) {
+    
 
-        id = e.teamId,
-            name = e.teamName
-
-    });
-    if ((req.body.assignTo).length == 1) {
+        id = req.body.teamId;
+        name = req.body.teamName;
+        
         if (name && id) {
 
             let temp = name.trim()
             let temp1 = id.trim()
+          
             if ((temp1.length !== 0) && (temp.length !== 0)) {
 
                 let newProjectDetails = {
                     id: req.params.projectId,
-                    assignTo: req.body.assignTo
+                    assignTo: req.body
 
                 }
                 activityDao.addAssignTo(newProjectDetails).then(data => {
 
-                    res.status('201').send({
+                    res.status('200').send({
                         data: data
                     })
 
@@ -199,14 +197,64 @@ function addAssignToResponse(req, res) {
                 }
             })
         }
-    } else {
-        res.status(400).send({
-            payload: {
-                msg: "pass only one team name"
-            }
-        })
-    }
+  
 }
+
+// function addAssignToResponse(req, res) {
+
+//         id = req.body.teamId
+//             name = req.body.teamName
+
+    
+//     if ((req.body).length == 1) {
+//         if (name && id) {
+
+//             let temp = name.trim()
+//             let temp1 = id.trim()
+//             if ((temp1.length !== 0) && (temp.length !== 0)) {
+
+//                 let newProjectDetails = {
+//                     projectId: req.params.projectId,
+//                     assignTo: req.body
+//                 };
+//                 console.log(newProjectDetails.assignTo,"ASDDF")
+//                 activityDao.addAssignTo(newProjectDetails).then(data => {
+
+//                     res.status('200').send({
+//                         data: data
+//                     })
+
+//                 }).catch(function (err) {
+//                     res.send({
+//                         "message": "team already exist"
+//                     })
+//                 })
+//             }
+//             else {
+//                 res.status(400).send({
+//                     payload: {
+//                         msg: "team id or name should not be null"
+//                     }
+//                 })
+
+//             }
+//         } else {
+//             res.status(400).send({
+//                 payload: {
+//                     msg: "please provide a team name"
+//                 }
+//             })
+//         }
+//     } else {
+//         res.status(400).send({
+//             payload: {
+//                 msg: "pass only one team name"
+//             }
+//         })
+//     }
+// }
+
+
 
 function createTaskResponse(req, res) {
     if (req.body.taskName) {
@@ -344,7 +392,7 @@ function findSpecificProjectResponse(req, res) {
 }
 
 function findTaskResponse(req, res) {
-    console.log("is this thing comes here ???")
+   
     let data = 
         {
             id:req.params.projectId,
@@ -500,6 +548,20 @@ function assignNullTaskResponse(req,res) {
     })
 }
 
+function assignTaskResponse(req, res) {
+    let data = {
+        taskId:req.params.taskId,
+        memberId:req.params.memberId
+    };
+
+    activityDao.assignTask(data).then(data => {
+        console.log(data, "this data is in controller..!!!")
+        res.status('200').send({
+            data:data
+        })
+    })
+}
+
 module.exports = {
     findSpecificProjectResponse,
     findProjectResponse,
@@ -524,5 +586,6 @@ module.exports = {
     deleteTeamResponse,
     assignDueDateResponse,
     markTaskCompleteResponse,
-    assignNullTaskResponse
+    assignNullTaskResponse,
+    assignTaskResponse
 }

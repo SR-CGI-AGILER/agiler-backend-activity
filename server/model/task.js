@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 var taskSchema = new Schema({
     taskName: String,
-    assignTo: [{memberId:String}],
+    assignTo: [{memberId:String, name:String}],
     createdBy: {memberId:String},
     createdAt: Date,
     dueDate: Date,

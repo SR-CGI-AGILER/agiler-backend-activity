@@ -27,6 +27,8 @@ function createProject(details) {
         })
     })
 }
+
+
 function addTeam(team) {
     return new Promise(function (resolve, reject) {
         project.findOne({
@@ -45,11 +47,11 @@ function addTeam(team) {
 }
 function addAssignTo(name) {
     return new Promise(function (resolve, reject) {
-        name.assignTo.map(function (e) {
+        console.log(name,"name hai from ctr")
             project.findOne({
                 "_id": name.id,
-                "assignTo.teamName": e.teamName,
-                "assignTo.teamId": e.teamId
+                "assignTo.teamName": name.assignTo.teamName,
+                "assignTo.teamId": name.assignTo.teamId
             }).exec(function (err, doc) {
                 if (err) {
                     throw err
@@ -57,7 +59,7 @@ function addAssignTo(name) {
                     if (doc === null) {
                         addTeam({
                             projectId: name.id,
-                            teamDetails: e
+                            teamDetails: name.assignTo
                         }).then(function (doc) {
                             resolve(doc)
                         }).catch(function (err) {
@@ -69,9 +71,10 @@ function addAssignTo(name) {
                 }
             })
 
-        })
+        
     })
 }
+
 
 function createTask(details) {
     return new Promise(function (resolve, reject) {
@@ -132,10 +135,10 @@ function findAllTeam(project_data){
         let b = parseInt(project_data.p);
         let c = a * b;
         team.find().limit(a).skip(c).exec(function (err, data) {
-            if(err){reject(err);}else{
-                resolve(data);
-            }
-           
+            if(err)
+            reject(err)
+            else
+            resolve(data);
         })
     })
 }
@@ -236,7 +239,6 @@ function addTeamMember(data) {
                 if (err) {
                     reject(err)
                 } else {
-                    console.log(doc,"doc is here bro")
                     doc.teamMembers.push({
                         "memberId": data.memberId,
                         "name":data.name,
@@ -443,7 +445,6 @@ function deleteTeam(team_data) {
 }
 
 function assignDueDate(task_data){
-    console.log(task_data, "this is task data......in DAO")
     return new Promise(function (resolve, reject) {
         task.findOneAndUpdate({
             "_id":task_data.taskId
@@ -453,7 +454,7 @@ function assignDueDate(task_data){
                     "dueDate": task_data.dueDate
                 }
             }, function (err, data) {
-                console.log(data, "this is data form the updated data from DB")
+                // console.log(data)
                 resolve(data)
             })
         })
@@ -492,6 +493,48 @@ function assignDueDate(task_data){
        })
    }
 
+
+
+//    function assignTask(task_data) {
+//        return new Promise( function( resolve, reject) {
+//            task.findOne({
+//                "_id":task_data.taskId
+//            }, function (err, data) {
+//                if(err)
+//                reject(err)
+//                else{
+//                    data.assignTo = {
+//                        memberId: task_data.memberId
+//                    }
+//                    data.save()
+//              console.log(data, "this task is in dao ...")
+//                resolve(data)
+//             }
+//            })
+//     })
+// }
+
+function assignTask(task_data) {
+    return new Promise((resolve, reject) => {
+        // console.log(data,"in dao");
+        task.findById(
+            {
+                "_id": task_data.taskId
+            }, function (err, doc) {
+                if (err) {
+                    reject(err)
+                } else {
+                    doc.assignTo.push({
+                        "memberId": task_data.memberId
+                    })
+                    // console.log(doc.teamMembers.memberId,"add team members");
+                    doc.save()
+                    resolve(doc)
+                }
+            })
+        })
+    }
+
 module.exports = {
     findSpecificProject,
     findProject,
@@ -517,5 +560,6 @@ module.exports = {
     addAssignTo,
     assignDueDate,
     markTaskComplete,
-    assignNullTask
+    assignNullTask,
+    assignTask
 }

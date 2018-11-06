@@ -29,6 +29,9 @@ router.patch('/task/:taskId', activityController.assignDueDateResponse);
 router.patch('/tasks/:taskId', activityController.markTaskCompleteResponse);
 router.patch('/taskz/:taskId',activityController.assignNullTaskResponse)
 router.patch('/teams/:teamId/:memberId', activityController.addTeamMemberResponse);
+router.patch('/taskx/:taskId/:memberId', activityController.assignTaskResponse);
+
+
 
 
 module.exports = router
