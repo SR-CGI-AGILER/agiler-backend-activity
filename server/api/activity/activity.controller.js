@@ -43,10 +43,16 @@ function findTeamMembersResponse(req, res) {
 }
 
 function addTeamMemberResponse(req, res) {
+    console.log(req.body, "this is the body of the req")
     let data = {
         teamId: req.params.teamId,
-        memberId: req.params.memberId
+        memberId: req.params.memberId,
+        name: req.body.name,
+        email:req.body.email,
+        profilePicUrl:req.body.profilePicUrl
     };
+
+    console.log(data, "this is controller..!! check")
     activityDao.addTeamMember(data).then(data => {
         res.status('200').send({
             data: data

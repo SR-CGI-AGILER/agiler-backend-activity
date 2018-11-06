@@ -160,7 +160,9 @@ function findTeam(data) {
         team.find({
             "teamMembers.memberId": memberId
         }, {
-            "teamName": 1
+            "teamName": 1,
+            "teamMembers": 1,
+            "createdAt":1
         }).exec((err, data) => {
             console.log(err,  data);
             resolve(data);
@@ -227,7 +229,7 @@ function deleteTeamMember(data) {
 function addTeamMember(data) {
     return new Promise((resolve, reject) => {
         // console.log(data,"in dao");
-        team.findById(
+        team.findOne(
             {
                 "_id": data.teamId
             }, function (err, doc) {
@@ -236,8 +238,12 @@ function addTeamMember(data) {
                 } else {
                     console.log(doc,"doc is here bro")
                     doc.teamMembers.push({
-                        "memberId": data.memberId
+                        "memberId": data.memberId,
+                        "name":data.name,
+                        "email":data.email,
+                        "profilePicUrl":data.profilePicUrl
                     })
+                    console.log(doc,"adf")
                     // console.log(doc.teamMembers.memberId,"add team members");
                     doc.save()
                     resolve(doc)
