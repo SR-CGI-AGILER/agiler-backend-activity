@@ -135,10 +135,10 @@ function findAllTeam(project_data){
         let b = parseInt(project_data.p);
         let c = a * b;
         team.find().limit(a).skip(c).exec(function (err, data) {
-            if(err){reject(err);}else{
-                resolve(data);
-            }
-           
+            if(err)
+            reject(err)
+            else
+            resolve(data);
         })
     })
 }
@@ -237,9 +237,8 @@ function addTeamMember(data) {
                 if (err) {
                     reject(err)
                 } else {
-                    console.log(doc,"doc is here bro")
                     doc.teamMembers.push({
-                        "memberId": data.memberId
+                        "memberId": doc.memberId
                     })
                     // console.log(doc.teamMembers.memberId,"add team members");
                     doc.save()
@@ -440,7 +439,6 @@ function deleteTeam(team_data) {
 }
 
 function assignDueDate(task_data){
-    console.log(task_data, "this is task data......in DAO")
     return new Promise(function (resolve, reject) {
         task.findOneAndUpdate({
             "_id":task_data.taskId
@@ -450,7 +448,7 @@ function assignDueDate(task_data){
                     "dueDate": task_data.dueDate
                 }
             }, function (err, data) {
-                console.log(data, "this is data form the updated data from DB")
+                // console.log(data)
                 resolve(data)
             })
         })
@@ -472,6 +470,7 @@ function assignDueDate(task_data){
            })
        })
    } 
+
 
 
 //    function assignTask(task_data) {
